@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 const pages = ['/', ...['sobre', 'projetos', 'habilidades', 'servicos', 'depoimentos',
-  'case-de-sucesso', 'contato'].map(name => `/pages/${name}.html`)];
+  'case-de-sucesso', 'contato', 'chat'].map(name => `/pages/${name}.html`)];
 
 for (const route of pages) {
   test(`${route} carrega recursos e navega sem transbordar a tela`, async ({ page }) => {

@@ -5,7 +5,7 @@ import { resolve, dirname } from 'node:path';
 
 const root = resolve('src/frontend');
 const pages = ['index.html', ...['sobre', 'projetos', 'habilidades', 'servicos',
-  'depoimentos', 'case-de-sucesso', 'contato'].map(name => `pages/${name}.html`)];
+  'depoimentos', 'case-de-sucesso', 'contato', 'chat'].map(name => `pages/${name}.html`)];
 
 for (const page of pages) {
   test(`${page}: entrada, imagens, estilos e links locais existem`, async () => {

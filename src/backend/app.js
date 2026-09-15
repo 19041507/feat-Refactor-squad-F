@@ -23,7 +23,7 @@ export function createApp({ config, fetchImpl = fetch }) {
     }
     next();
   });
-  app.use(express.json({ limit: '32kb' }));
+  app.use(express.json({ limit: '256kb' }));
   app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
   app.use('/api/chat', createChatRouter(createAiService(config, fetchImpl)));
   app.use('/assets', express.static(join(projectRoot, 'assets'), { dotfiles: 'deny' }));

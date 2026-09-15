@@ -51,7 +51,7 @@ test('rejeita entradas vazias, grandes e histórico com papéis privilegiados', 
     { message: 'oi', history: [{ role: 'user', content: 'sem resposta' }] }]) {
     assert.equal((await request('/api/chat', body)).status, 400);
   }
-  assert.equal((await request('/api/chat', { message: 'a'.repeat(40000) })).status, 413);
+  assert.equal((await request('/api/chat', { message: 'a'.repeat(300000) })).status, 413);
 });
 
 test('não publica segredos, código servidor ou dependências', async t => {
@@ -75,4 +75,17 @@ test('bloqueia chamadas vindas de outra origem', async t => {
   const request = await launch(t);
   const response = await request('/api/chat', { message: 'Oi' }, { Origin: 'https://outro-site.example' });
   assert.equal(response.status, 403);
+});
+
+test('aceita histórico completo dentro dos limites de caracteres', async t => {
+  const request = await launch(t, {
+    config: readConfig({ OPENAI_API_KEY: 'test-key' }),
+    fetchImpl: async () => Response.json({ status: 'completed', output: [
+      { type: 'message', role: 'assistant', content: [{ type: 'output_text', text: 'Ok' }] },
+    ] }),
+  });
+  const history = Array.from({ length: 10 }, (_, index) => ({
+    role: index % 2 ? 'assistant' : 'user', content: '漢'.repeat(index % 2 ? 10000 : 2000),
+  }));
+  assert.equal((await request('/api/chat', { message: 'Continue', history })).status, 200);
 });
