@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Converse com o assistente de IA do Squad F sobre tecnologia e organização de código.">
+  <title>Chat com IA — Squad F</title>
+  <link rel="stylesheet" href="/styles/base.css">
+  <link rel="stylesheet" href="/styles/layout.css">
+  <link rel="stylesheet" href="/styles/components.css">
+  <link rel="stylesheet" href="/styles/pages/chat.css">
+  <script type="module" src="/scripts/main.js"></script>
+  <script type="module" src="/scripts/chat.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <header class="site-header" data-site-header></header>
+  <noscript><p class="no-script">Ative JavaScript para conversar com a IA. <a href="/index.html">Voltar ao início</a>.</p></noscript>
+  <main id="conteudo" class="chat-page">
+    <div class="chat-heading"><div><p class="eyebrow">Explore · Pergunte · Aprenda</p><h1>Uma conversa.<br>Novas possibilidades<span>.</span></h1></div><p>Seu próximo passo começa com uma boa pergunta.</p></div>
+    <div class="chat-layout">
+      <aside class="chat-sidebar" aria-label="Sobre o assistente">
+        <span class="assistant-symbol" aria-hidden="true">✦</span>
+        <h2>Assistente Squad F</h2>
+        <p>Um espaço para tirar dúvidas sobre tecnologia, desenvolvimento web e organização de projetos.</p>
+        <div class="sidebar-note"><strong>Feito para aprender junto.</strong><p>As respostas são geradas por IA e podem conter erros. Confira informações importantes.</p></div>
+        <p class="privacy-note">As mensagens são enviadas à OpenAI para gerar a resposta. A conversa fica nesta aba e é apagada ao recarregar.</p>
+      </aside>
+      <section class="chat-panel" aria-label="Conversa com a IA">
+        <div class="chat-toolbar"><span><span class="chat-dot" aria-hidden="true"></span>Conversa com IA</span><button class="btn-secondary" type="button" id="new-chat">Nova conversa</button></div>
+        <div class="chat-scroll" id="chat-scroll">
+          <div class="chat-welcome" id="chat-welcome"><span aria-hidden="true">✦</span><h2>O que vamos descobrir hoje?</h2><p>Escolha uma ideia ou escreva sua pergunta.</p><div class="suggestions"><button type="button">Como organizar meu código?</button><button type="button">O que é refatoração?</button><button type="button">Como testar um site?</button></div></div>
+          <div class="messages" id="messages" role="log" aria-label="Mensagens da conversa" aria-live="polite" aria-relevant="additions"></div>
+        </div>
+        <form id="chat-form" class="chat-form">
+          <label for="message">Sua mensagem</label>
+          <textarea id="message" name="message" maxlength="2000" rows="2" required placeholder="Escreva sua pergunta…" aria-describedby="message-help"></textarea>
+          <div class="composer-bottom"><span id="message-help">Enter envia · Shift + Enter quebra a linha</span><button type="submit" class="btn-primary">Enviar mensagem <span aria-hidden="true">↗</span></button></div>
+          <p class="chat-status" id="chat-status" role="status"></p>
+          <p class="chat-error" id="chat-error" role="alert" hidden></p>
+        </form>
+      </section>
+    </div>
+  </main>
+  <footer class="site-footer" data-site-footer></footer>
+</body>
+</html>
