@@ -132,3 +132,29 @@ test('aceita histórico completo dentro dos limites de caracteres', async (t) =>
   }));
   assert.equal((await request('/api/chat', { message: 'Continue', history })).status, 200);
 });
+
+test('preferência de detalhe controla orçamento e rejeita opções desconhecidas', async (t) => {
+  let budget;
+  const request = await launch(t, {
+    config: readConfig({ OPENAI_API_KEY: 'test-key' }),
+    fetchImpl: async (_, options) => {
+      budget = JSON.parse(options.body).max_output_tokens;
+      return Response.json({
+        status: 'completed',
+        output: [
+          {
+            type: 'message',
+            role: 'assistant',
+            content: [{ type: 'output_text', text: 'Resposta.' }],
+          },
+        ],
+      });
+    },
+  });
+  assert.equal(
+    (await request('/api/chat', { message: 'O que é HTML?', detail: 'detailed' })).status,
+    200,
+  );
+  assert.equal(budget, 800);
+  assert.equal((await request('/api/chat', { message: 'Oi', detail: 'unlimited' })).status, 400);
+});

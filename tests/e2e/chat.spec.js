@@ -78,3 +78,26 @@ test('sem chave exibe falha real do backend e não simula resposta', async ({ pa
   await expect(page.getByRole('alert')).toContainText('não está disponível');
   await expect(page.getByRole('log').locator('article')).toHaveCount(0);
 });
+
+test('usuário escolhe detalhes e vê sua mensagem enquanto aguarda', async ({ page }) => {
+  let payload;
+  let release;
+  const gate = new Promise((resolve) => {
+    release = resolve;
+  });
+  await page.route('**/api/chat', async (route) => {
+    payload = route.request().postDataJSON();
+    await gate;
+    await route.fulfill({ json: { reply: 'Vamos por partes.' } });
+  });
+  await page.goto('/pages/chat.html');
+  await page.getByLabel('Estilo da resposta').selectOption('detailed');
+  await page.getByLabel('Sua mensagem').fill('Me explica CSS');
+  await page.getByLabel('Sua mensagem').press('Enter');
+  await expect(page.getByRole('log')).toContainText('Me explica CSS');
+  await expect(page.getByLabel('Estilo da resposta')).toBeDisabled();
+  release();
+  await expect(page.getByRole('status')).toHaveText('Resposta recebida.');
+  expect(payload.detail).toBe('detailed');
+  await expect(page.getByRole('log').locator('article')).toHaveCount(2);
+});

@@ -34,10 +34,10 @@
       <div class="chat-layout">
         <aside class="chat-sidebar" aria-label="Sobre o assistente">
           <span class="assistant-symbol" aria-hidden="true">✦</span>
-          <h2>Assistente Squad F</h2>
+          <h2>Fê, do Squad F</h2>
           <p>
-            Um espaço para tirar dúvidas sobre tecnologia, desenvolvimento web e organização de
-            projetos.
+            Seu parceiro de ideias, estudos e código. Papo leve, exemplos práticos e respostas sem
+            enrolação.
           </p>
           <div class="sidebar-note">
             <strong>Feito para aprender junto.</strong>
@@ -58,8 +58,8 @@
           <div class="chat-scroll" id="chat-scroll">
             <div class="chat-welcome" id="chat-welcome">
               <span aria-hidden="true">✦</span>
-              <h2>O que vamos descobrir hoje?</h2>
-              <p>Escolha uma ideia ou escreva sua pergunta.</p>
+              <h2>E aí, bora desenrolar?</h2>
+              <p>Sou Fê. Manda sua dúvida que a gente vai direto ao ponto.</p>
               <div class="suggestions">
                 <button type="button">Como organizar meu código?</button
                 ><button type="button">O que é refatoração?</button
@@ -76,6 +76,13 @@
             ></div>
           </div>
           <form id="chat-form" class="chat-form">
+            <div class="response-options">
+              <label for="response-detail">Estilo da resposta</label>
+              <select id="response-detail" name="detail">
+                <option value="brief">Direto ao ponto</option>
+                <option value="detailed">Com mais detalhes</option>
+              </select>
+            </div>
             <label for="message">Sua mensagem</label>
             <textarea
               id="message"

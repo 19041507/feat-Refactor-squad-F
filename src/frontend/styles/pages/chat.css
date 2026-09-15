@@ -1,6 +1,27 @@
 .chat-page {
   padding-top: 44px;
 }
+.response-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.response-options label {
+  margin: 0;
+}
+.response-options select {
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--ink);
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  max-width: 100%;
+}
 .chat-heading {
   display: flex;
   justify-content: space-between;

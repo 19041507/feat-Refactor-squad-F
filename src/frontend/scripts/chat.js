@@ -7,6 +7,7 @@ const welcome = document.querySelector('#chat-welcome');
 const status = document.querySelector('#chat-status');
 const errorBox = document.querySelector('#chat-error');
 const scroll = document.querySelector('#chat-scroll');
+const detail = document.querySelector('#response-detail');
 let history = [];
 let busy = false;
 
@@ -14,17 +15,19 @@ function appendMessage(role, content) {
   const article = document.createElement('article');
   article.dataset.role = role;
   const title = document.createElement('h3');
-  title.textContent = role === 'user' ? 'Você' : 'Assistente Squad F';
+  title.textContent = role === 'user' ? 'Você' : 'Fê · Squad F';
   const text = document.createElement('p');
   text.textContent = content;
   article.append(title, text);
   messages.append(article);
+  return article;
 }
 
 function setBusy(value) {
   busy = value;
   send.disabled = value;
   reset.disabled = value;
+  detail.disabled = value;
   input.readOnly = value;
   send.textContent = value ? 'Enviando…' : 'Enviar mensagem ↗';
   send.setAttribute('aria-label', value ? 'Enviando…' : 'Enviar mensagem');
@@ -43,13 +46,16 @@ form.addEventListener('submit', async (event) => {
     return;
   }
   errorBox.hidden = true;
-  status.textContent = 'Preparando sua resposta…';
+  status.textContent = 'Fê está pensando…';
   setBusy(true);
+  welcome.hidden = true;
+  const pending = appendMessage('user', message);
+  scroll.scrollTop = scroll.scrollHeight;
   try {
     const response = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message, history: history.slice(-10) }),
+      body: JSON.stringify({ message, history: history.slice(-10), detail: detail.value }),
       signal: AbortSignal.timeout(130000),
     });
     const data = await response.json();
@@ -57,7 +63,6 @@ form.addEventListener('submit', async (event) => {
     if (typeof data.reply !== 'string' || !data.reply.trim())
       throw new Error('Resposta vazia. Tente novamente.');
     welcome.hidden = true;
-    appendMessage('user', message);
     appendMessage('assistant', data.reply);
     history.push({ role: 'user', content: message }, { role: 'assistant', content: data.reply });
     history = history.slice(-10);
@@ -65,6 +70,8 @@ form.addEventListener('submit', async (event) => {
     status.textContent = 'Resposta recebida.';
     scroll.scrollTop = scroll.scrollHeight;
   } catch (error) {
+    pending.remove();
+    welcome.hidden = messages.childElementCount > 0;
     status.textContent = '';
     errorBox.textContent =
       error.name === 'TimeoutError'

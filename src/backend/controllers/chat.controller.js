@@ -2,7 +2,10 @@ import { ChatError } from '../services/ai.service.js';
 
 export function createChatController(reply) {
   return async (req, res) => {
-    const { message, history = [] } = req.body ?? {};
+    const { message, history = [], detail = 'brief' } = req.body ?? {};
+    if (!['brief', 'detailed'].includes(detail)) {
+      throw new ChatError(400, 'Escolha uma resposta direta ou com mais detalhes.');
+    }
     if (typeof message !== 'string' || !message.trim() || message.length > 2000) {
       throw new ChatError(400, 'Escreva uma mensagem de até 2.000 caracteres.');
     }
@@ -24,6 +27,6 @@ export function createChatController(reply) {
       return { role, content: item.content.trim() };
     });
     messages.push({ role: 'user', content: message.trim() });
-    res.json({ reply: await reply(messages) });
+    res.json({ reply: await reply(messages, { detail }) });
   };
 }
