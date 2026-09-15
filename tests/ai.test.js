@@ -84,3 +84,100 @@ test('timeout e falha de rede geram erros recuperáveis', async () => {
     await assert.rejects(service(messages), (error) => error.status === status);
   }
 });
+
+test('falha transitória troca uma vez de modelo e entrega resposta', async () => {
+  const calls = [];
+  const service = createAiService({ ...config, fastModel: 'fast' }, async (_, options) => {
+    calls.push(JSON.parse(options.body));
+    return calls.length === 1
+      ? Response.json({ error: { code: 'server_error' } }, { status: 503 })
+      : Response.json(result([{ type: 'output_text', text: 'Bora organizar isso!' }]));
+  });
+  assert.equal(await service([{ role: 'user', content: 'Oi' }]), 'Bora organizar isso!');
+  assert.deepEqual(
+    calls.map((call) => call.model),
+    ['fast', 'test-model'],
+  );
+  assert.ok(calls.every((call) => call.max_output_tokens === 160));
+});
+
+test('chave inválida e cota esgotada não gastam tentativa em outro modelo', async () => {
+  for (const [status, code] of [
+    [401, 'invalid_api_key'],
+    [429, 'insufficient_quota'],
+    [400, 'invalid_request_error'],
+  ]) {
+    let calls = 0;
+    const service = createAiService({ ...config, fastModel: 'fast' }, async () => {
+      calls++;
+      return Response.json({ error: { code } }, { status });
+    });
+    await assert.rejects(service(messages));
+    assert.equal(calls, 1);
+  }
+});
+
+test('modelo indisponível e rate limit temporário permitem alternativa; falhas param em duas tentativas', async () => {
+  for (const code of [404, 403, 429, 500]) {
+    let count = 0;
+    const service = createAiService({ ...config, fastModel: 'fast' }, async () => {
+      count++;
+      return Response.json({ error: { code: 'temporary' } }, { status: code });
+    });
+    await assert.rejects(service(messages));
+    assert.equal(count, 2);
+  }
+});
+
+test('orçamento aumenta só com pedido detalhado e contexto enviado é limitado', async () => {
+  const sent = [];
+  const service = createAiService(config, async (_, options) => {
+    sent.push(JSON.parse(options.body));
+    return Response.json(result([{ type: 'output_text', text: 'Tudo certo.' }]));
+  });
+  await service(messages);
+  await service(messages, { detail: 'detailed' });
+  assert.equal(sent[0].max_output_tokens, 360);
+  assert.equal(sent[1].max_output_tokens, 800);
+});
+
+test('resposta parcial útil não dispara nova cobrança e informa limite', async () => {
+  let calls = 0;
+  const service = createAiService({ ...config, fastModel: 'fast' }, async () => {
+    calls++;
+    return Response.json({
+      ...result([{ type: 'output_text', text: 'Comece por src/.' }]),
+      status: 'incomplete',
+      incomplete_details: { reason: 'max_output_tokens' },
+    });
+  });
+  const reply = await service(messages);
+  assert.match(reply, /Comece por src/);
+  assert.match(reply, /limite/i);
+  assert.equal(calls, 1);
+});
+
+test('timeout aborta tentativa travada e ainda permite alternativa dentro do prazo total', async () => {
+  let calls = 0;
+  const service = createAiService(
+    { ...config, timeoutMs: 200, fastModel: 'fast' },
+    async (_, options) => {
+      calls++;
+      if (calls === 2)
+        return Response.json(result([{ type: 'output_text', text: 'Resposta alternativa.' }]));
+      return new Promise((resolve, reject) => {
+        const timer = setTimeout(() => reject(new Error('sinal não abortou')), 1000);
+        options.signal.addEventListener(
+          'abort',
+          () => {
+            clearTimeout(timer);
+            reject(options.signal.reason);
+          },
+          { once: true },
+        );
+      });
+    },
+  );
+  assert.equal(await service(messages), 'Resposta alternativa.');
+  assert.equal(calls, 2);
+});
