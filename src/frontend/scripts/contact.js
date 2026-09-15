@@ -4,7 +4,7 @@ const text = document.querySelector('#contact-text');
 const status = document.querySelector('#contact-status');
 form.querySelector('button[type="submit"]').disabled = false;
 
-form.addEventListener('submit', event => {
+form.addEventListener('submit', (event) => {
   event.preventDefault();
   const fields = new FormData(form);
   const name = fields.get('nome').trim();

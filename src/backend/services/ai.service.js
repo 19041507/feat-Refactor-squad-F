@@ -23,26 +23,34 @@ export function createAiService(config, fetchImpl = fetch) {
         method: 'POST',
         headers: { Authorization: `Bearer ${config.apiKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: config.model, instructions, input: messages,
-          max_output_tokens: 800, store: false,
+          model: config.model,
+          instructions,
+          input: messages,
+          max_output_tokens: 800,
+          store: false,
         }),
         signal: AbortSignal.timeout(config.timeoutMs),
       });
-      if (response.status === 429) throw new ChatError(429, 'O serviço atingiu seu limite de uso. Tente mais tarde.');
+      if (response.status === 429)
+        throw new ChatError(429, 'O serviço atingiu seu limite de uso. Tente mais tarde.');
       if ([401, 403].includes(response.status)) {
         throw new ChatError(503, 'O serviço de IA está indisponível no momento.');
       }
-      if (!response.ok) throw new ChatError(502, 'Não foi possível consultar a IA. Tente novamente.');
+      if (!response.ok)
+        throw new ChatError(502, 'Não foi possível consultar a IA. Tente novamente.');
       const data = await response.json();
       if (data.status !== 'completed' || !Array.isArray(data.output)) {
         throw new ChatError(502, 'A IA não concluiu a resposta. Tente novamente.');
       }
       const text = data.output
-        .filter(item => item.type === 'message' && item.role === 'assistant')
-        .flatMap(item => Array.isArray(item.content) ? item.content : [])
-        .map(item => item.type === 'output_text' ? item.text : item.type === 'refusal' ? item.refusal : '')
-        .filter(value => typeof value === 'string' && value.trim())
-        .join('\n').trim();
+        .filter((item) => item.type === 'message' && item.role === 'assistant')
+        .flatMap((item) => (Array.isArray(item.content) ? item.content : []))
+        .map((item) =>
+          item.type === 'output_text' ? item.text : item.type === 'refusal' ? item.refusal : '',
+        )
+        .filter((value) => typeof value === 'string' && value.trim())
+        .join('\n')
+        .trim();
       if (!text) throw new ChatError(502, 'A IA retornou uma resposta vazia. Tente novamente.');
       return text;
     } catch (error) {

@@ -1,18 +1,74 @@
-.section-hero { display: grid; grid-template-columns: 1.25fr 1fr; gap: 60px; align-items: center; padding: 25px 0 50px; }
-.hero-text h1 { max-width: 620px; }
-.hero-text h1 span { color: var(--blue); }
-.hero-text > p:not(.eyebrow) { font-size: 1.15rem; max-width: 480px; }
-.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
-.team-members { background: #142b54; padding: 32px; border-radius: 24px; box-shadow: 0 24px 48px rgb(20 43 84 / 16%); }
-.team-members > .eyebrow { color: #bdceef; }
-.member { padding: 18px 0; border-bottom: 1px solid #355078; }
-.member:last-child { border-bottom: none; padding-bottom: 0; }
-.member h3 { color: white; margin-bottom: 4px; }
-.member p { color: #c2cfe5; margin: 0; font-size: .9rem; }
-.home-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); padding-top: 32px; gap: 32px; }
-.home-summary h2 { font-size: 1.1rem; }
-.home-summary p { margin-bottom: 0; font-size: .92rem; }
+.section-hero {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 60px;
+  align-items: center;
+  padding: 25px 0 50px;
+}
+.hero-text h1 {
+  max-width: 620px;
+}
+.hero-text h1 span {
+  color: var(--blue);
+}
+.hero-text > p:not(.eyebrow) {
+  font-size: 1.15rem;
+  max-width: 480px;
+}
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+.team-members {
+  background: #142b54;
+  padding: 32px;
+  border-radius: 24px;
+  box-shadow: 0 24px 48px rgb(20 43 84 / 16%);
+}
+.team-members > .eyebrow {
+  color: #bdceef;
+}
+.member {
+  padding: 18px 0;
+  border-bottom: 1px solid #355078;
+}
+.member:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.member h3 {
+  color: white;
+  margin-bottom: 4px;
+}
+.member p {
+  color: #c2cfe5;
+  margin: 0;
+  font-size: 0.9rem;
+}
+.home-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  padding-top: 32px;
+  gap: 32px;
+}
+.home-summary h2 {
+  font-size: 1.1rem;
+}
+.home-summary p {
+  margin-bottom: 0;
+  font-size: 0.92rem;
+}
 @media (max-width: 800px) {
-  .section-hero { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-top: 0; }
-  .home-summary { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .section-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    padding-top: 0;
+  }
+  .home-summary {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
 }

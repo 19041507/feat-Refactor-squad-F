@@ -1,60 +1,101 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Contato — portfólio acadêmico do Squad F. Desenvolvimento web, colaboração e aprendizado.">
-  <title>Contato — Squad F</title>
-  <link rel="stylesheet" href="/styles/base.css">
-  <link rel="stylesheet" href="/styles/layout.css">
-  <link rel="stylesheet" href="/styles/components.css">
-  <script type="module" src="/scripts/main.js"></script>
-  <script type="module" src="/scripts/contact.js"></script>
-</head>
-<body>
-  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-  <header class="site-header" data-site-header></header>
-  <noscript><nav class="no-script" aria-label="Páginas"><a href="/index.html">Início</a> · <a href="/pages/sobre.html">Sobre</a> · <a href="/pages/projetos.html">Projetos</a> · <a href="/pages/habilidades.html">Habilidades</a> · <a href="/pages/servicos.html">Serviços</a> · <a href="/pages/depoimentos.html">Depoimentos</a> · <a href="/pages/case-de-sucesso.html">Estudo de caso</a> · <a href="/pages/contato.html">Contato</a></nav></noscript>
-  <main id="conteudo">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Contato — portfólio acadêmico do Squad F. Desenvolvimento web, colaboração e aprendizado."
+    />
+    <title>Contato — Squad F</title>
+    <link rel="stylesheet" href="/styles/base.css" />
+    <link rel="stylesheet" href="/styles/layout.css" />
+    <link rel="stylesheet" href="/styles/components.css" />
+    <script type="module" src="/scripts/main.js"></script>
+    <script type="module" src="/scripts/contact.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <header class="site-header" data-site-header></header>
+    <noscript
+      ><nav class="no-script" aria-label="Páginas">
+        <a href="/index.html">Início</a> · <a href="/pages/sobre.html">Sobre</a> ·
+        <a href="/pages/projetos.html">Projetos</a> ·
+        <a href="/pages/habilidades.html">Habilidades</a> ·
+        <a href="/pages/servicos.html">Serviços</a> ·
+        <a href="/pages/depoimentos.html">Depoimentos</a> ·
+        <a href="/pages/case-de-sucesso.html">Estudo de caso</a> ·
+        <a href="/pages/contato.html">Contato</a>
+      </nav></noscript
+    >
+    <main id="conteudo">
+      <section class="page-intro">
+        <h1>Vamos Conversar?</h1>
+        <p>
+          Tem uma ideia para compartilhar? Organize sua mensagem e copie o texto para enviar pelo
+          canal de sua preferência.
+        </p>
+        <p>Você também pode <a href="/pages/chat.html">conversar com o assistente de IA</a>.</p>
+      </section>
 
-        <section class="page-intro">
-            <h1>Vamos Conversar?</h1>
-            <p>Tem uma ideia para compartilhar? Organize sua mensagem e copie o texto para enviar pelo canal de sua preferência.</p>
-            <p>Você também pode <a href="/pages/chat.html">conversar com o assistente de IA</a>.</p>
-        </section>
-
-        <section class="form-section">
-            <div class="project-card">
-                <form id="contact-form">
-
-                    <div>
-                        <label for="nome">Nome Completo</label>
-                        <input type="text" id="nome" name="nome" autocomplete="name" maxlength="100" required placeholder="Digite seu nome">
-                    </div>
-
-                    <div>
-                        <label for="email">E-mail</label>
-                        <input type="email" id="email" name="email" autocomplete="email" maxlength="254" required placeholder="Digite seu e-mail">
-                    </div>
-
-                    <div>
-                        <label for="mensagem">Mensagem</label>
-                        <textarea id="mensagem" name="mensagem" rows="5" maxlength="2000" required placeholder="Como podemos ajudar?"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn-primary" disabled>Preparar mensagem</button>
-
-                </form>
-                <noscript><p>Ative JavaScript para preparar a mensagem. Nenhum dado será enviado por este formulário.</p></noscript>
-                <div id="contact-preview" hidden>
-                  <label for="contact-text">Mensagem pronta para copiar</label>
-                  <textarea id="contact-text" readonly rows="6"></textarea>
-                  <button id="copy-contact" type="button" class="btn-secondary">Copiar mensagem</button>
-                </div>
-                <p id="contact-status" class="form-status" role="status"></p>
+      <section class="form-section">
+        <div class="project-card">
+          <form id="contact-form">
+            <div>
+              <label for="nome">Nome Completo</label>
+              <input
+                type="text"
+                id="nome"
+                name="nome"
+                autocomplete="name"
+                maxlength="100"
+                required
+                placeholder="Digite seu nome"
+              />
             </div>
-        </section>
-  </main>
-  <footer class="site-footer" data-site-footer></footer>
-</body>
+
+            <div>
+              <label for="email">E-mail</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                autocomplete="email"
+                maxlength="254"
+                required
+                placeholder="Digite seu e-mail"
+              />
+            </div>
+
+            <div>
+              <label for="mensagem">Mensagem</label>
+              <textarea
+                id="mensagem"
+                name="mensagem"
+                rows="5"
+                maxlength="2000"
+                required
+                placeholder="Como podemos ajudar?"
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary" disabled>Preparar mensagem</button>
+          </form>
+          <noscript
+            ><p>
+              Ative JavaScript para preparar a mensagem. Nenhum dado será enviado por este
+              formulário.
+            </p></noscript
+          >
+          <div id="contact-preview" hidden>
+            <label for="contact-text">Mensagem pronta para copiar</label>
+            <textarea id="contact-text" readonly rows="6"></textarea>
+            <button id="copy-contact" type="button" class="btn-secondary">Copiar mensagem</button>
+          </div>
+          <p id="contact-status" class="form-status" role="status"></p>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer" data-site-footer></footer>
+  </body>
 </html>

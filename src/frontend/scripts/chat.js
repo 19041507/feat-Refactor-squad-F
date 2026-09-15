@@ -29,14 +29,19 @@ function setBusy(value) {
   send.textContent = value ? 'Enviando…' : 'Enviar mensagem ↗';
   send.setAttribute('aria-label', value ? 'Enviando…' : 'Enviar mensagem');
   form.setAttribute('aria-busy', String(value));
-  document.querySelectorAll('.suggestions button').forEach(button => { button.disabled = value; });
+  document.querySelectorAll('.suggestions button').forEach((button) => {
+    button.disabled = value;
+  });
 }
 
-form.addEventListener('submit', async event => {
+form.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (busy) return;
   const message = input.value.trim();
-  if (!message) { input.focus(); return; }
+  if (!message) {
+    input.focus();
+    return;
+  }
   errorBox.hidden = true;
   status.textContent = 'Preparando sua resposta…';
   setBusy(true);
@@ -49,7 +54,8 @@ form.addEventListener('submit', async event => {
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || 'Não foi possível enviar. Tente novamente.');
-    if (typeof data.reply !== 'string' || !data.reply.trim()) throw new Error('Resposta vazia. Tente novamente.');
+    if (typeof data.reply !== 'string' || !data.reply.trim())
+      throw new Error('Resposta vazia. Tente novamente.');
     welcome.hidden = true;
     appendMessage('user', message);
     appendMessage('assistant', data.reply);
@@ -60,10 +66,12 @@ form.addEventListener('submit', async event => {
     scroll.scrollTop = scroll.scrollHeight;
   } catch (error) {
     status.textContent = '';
-    errorBox.textContent = error.name === 'TimeoutError'
-      ? 'A resposta demorou muito. Tente novamente.'
-      : error instanceof TypeError || error instanceof SyntaxError
-        ? 'Não foi possível conectar. Verifique sua conexão e tente novamente.' : error.message;
+    errorBox.textContent =
+      error.name === 'TimeoutError'
+        ? 'A resposta demorou muito. Tente novamente.'
+        : error instanceof TypeError || error instanceof SyntaxError
+          ? 'Não foi possível conectar. Verifique sua conexão e tente novamente.'
+          : error.message;
     errorBox.hidden = false;
   } finally {
     setBusy(false);
@@ -71,7 +79,7 @@ form.addEventListener('submit', async event => {
   }
 });
 
-input.addEventListener('keydown', event => {
+input.addEventListener('keydown', (event) => {
   if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
     event.preventDefault();
     if (!busy) form.requestSubmit();
@@ -86,6 +94,9 @@ reset.addEventListener('click', () => {
   input.value = '';
   input.focus();
 });
-document.querySelectorAll('.suggestions button').forEach(button => {
-  button.addEventListener('click', () => { input.value = button.textContent; input.focus(); });
+document.querySelectorAll('.suggestions button').forEach((button) => {
+  button.addEventListener('click', () => {
+    input.value = button.textContent;
+    input.focus();
+  });
 });

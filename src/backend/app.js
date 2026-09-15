@@ -11,7 +11,8 @@ export function createApp({ config, fetchImpl = fetch }) {
     res.set({
       'X-Content-Type-Options': 'nosniff',
       'Referrer-Policy': 'same-origin',
-      'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' mailto:",
+      'Content-Security-Policy':
+        "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' mailto:",
     });
     next();
   });
@@ -32,8 +33,10 @@ export function createApp({ config, fetchImpl = fetch }) {
   app.use((error, req, res, next) => {
     if (res.headersSent) return next(error);
     if (error instanceof ChatError) return res.status(error.status).json({ error: error.message });
-    if (error.type === 'entity.too.large') return res.status(413).json({ error: 'Mensagem muito grande.' });
-    if (error.type === 'entity.parse.failed') return res.status(400).json({ error: 'Envie um JSON válido.' });
+    if (error.type === 'entity.too.large')
+      return res.status(413).json({ error: 'Mensagem muito grande.' });
+    if (error.type === 'entity.parse.failed')
+      return res.status(400).json({ error: 'Envie um JSON válido.' });
     res.status(500).json({ error: 'Não foi possível concluir a solicitação.' });
   });
   return app;

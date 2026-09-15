@@ -12,8 +12,13 @@ export function createChatController(reply) {
     const messages = history.map((item, index) => {
       const role = index % 2 === 0 ? 'user' : 'assistant';
       const max = role === 'user' ? 2000 : 10000;
-      if (!item || item.role !== role || typeof item.content !== 'string'
-        || !item.content.trim() || item.content.length > max) {
+      if (
+        !item ||
+        item.role !== role ||
+        typeof item.content !== 'string' ||
+        !item.content.trim() ||
+        item.content.length > max
+      ) {
         throw new ChatError(400, 'O histórico da conversa é inválido. Inicie uma nova conversa.');
       }
       return { role, content: item.content.trim() };

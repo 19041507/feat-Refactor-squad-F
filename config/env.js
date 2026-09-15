@@ -4,8 +4,11 @@ import { fileURLToPath } from 'node:url';
 export const projectRoot = fileURLToPath(new URL('../', import.meta.url));
 
 export function loadLocalEnv() {
-  try { loadEnvFile(new URL('../.env', import.meta.url)); }
-  catch (error) { if (error.code !== 'ENOENT') throw error; }
+  try {
+    loadEnvFile(new URL('../.env', import.meta.url));
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+  }
 }
 
 export function readConfig(env = process.env) {

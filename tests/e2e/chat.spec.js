@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('envia, mantém contexto e limpa conversa sem executar HTML', async ({ page }) => {
   const requests = [];
-  await page.route('**/api/chat', async route => {
+  await page.route('**/api/chat', async (route) => {
     requests.push(route.request().postDataJSON());
     await route.fulfill({ json: { reply: '<img src=x onerror=alert(1)> Use src/ e tests/.' } });
   });
@@ -26,13 +26,17 @@ test('envia, mantém contexto e limpa conversa sem executar HTML', async ({ page
   expect(requests[2].history).toEqual([]);
 });
 
-test('falha mantém rascunho e permite tentar novamente sem duplicar histórico', async ({ page }) => {
+test('falha mantém rascunho e permite tentar novamente sem duplicar histórico', async ({
+  page,
+}) => {
   let count = 0;
-  await page.route('**/api/chat', async route => {
+  await page.route('**/api/chat', async (route) => {
     count++;
-    await route.fulfill(count === 1
-      ? { status: 502, json: { error: 'Tente novamente.' } }
-      : { json: { reply: 'Agora funcionou.' } });
+    await route.fulfill(
+      count === 1
+        ? { status: 502, json: { error: 'Tente novamente.' } }
+        : { json: { reply: 'Agora funcionou.' } },
+    );
   });
   await page.goto('/pages/chat.html');
   const input = page.getByLabel('Sua mensagem');
@@ -47,8 +51,10 @@ test('falha mantém rascunho e permite tentar novamente sem duplicar histórico'
 
 test('bloqueia envio duplo durante carregamento e aceita quebra de linha', async ({ page }) => {
   let release;
-  const gate = new Promise(resolve => { release = resolve; });
-  await page.route('**/api/chat', async route => {
+  const gate = new Promise((resolve) => {
+    release = resolve;
+  });
+  await page.route('**/api/chat', async (route) => {
     await gate;
     await route.fulfill({ json: { reply: 'Olá!' } });
   });

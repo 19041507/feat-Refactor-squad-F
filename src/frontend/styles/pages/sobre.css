@@ -1,13 +1,43 @@
-.section-sobre { max-width: 850px; }
-.section-valores, .section-equipe { margin-top: 48px; }
-.values-container, .team-grid-container { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.icon-value { display: block; font-size: 1.5rem; margin-bottom: 16px; }
-.value-item p { font-size: .9rem; margin-bottom: 0; }
-.member-card img { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; }
-.member-card .role { font-size: .88rem; margin: 0; }
+.section-sobre {
+  max-width: 850px;
+}
+.section-valores,
+.section-equipe {
+  margin-top: 48px;
+}
+.values-container,
+.team-grid-container {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.icon-value {
+  display: block;
+  font-size: 1.5rem;
+  margin-bottom: 16px;
+}
+.value-item p {
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+.member-card img {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+.member-card .role {
+  font-size: 0.88rem;
+  margin: 0;
+}
 @media (max-width: 1000px) {
-  .values-container, .team-grid-container { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .values-container,
+  .team-grid-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 @media (max-width: 500px) {
-  .values-container, .team-grid-container { grid-template-columns: minmax(0, 1fr); }
+  .values-container,
+  .team-grid-container {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
