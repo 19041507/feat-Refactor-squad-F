@@ -7,10 +7,10 @@ Na pasta `squad-f`, execute `npm run check`. Em um novo ambiente, execute antes
 
 As suítes cobrem:
 
-- 26 testes Node: configuração, caminhos das nove páginas, API HTTP,
+- 40 testes Node: configuração, caminhos das nove páginas, API HTTP,
   proteção de arquivos privados, limites de uso, validação de histórico,
   extração da resposta da IA, recusa, timeout e erros do provedor.
-- 30 cenários Chromium: navegação e recursos em 1440px e 390px, menu por
+- 32 cenários Chromium: navegação e recursos em 1440px e 390px, menu por
   teclado, chat, texto HTML inofensivo, contexto, nova conversa, falha
   recuperável, prevenção de envio duplo e preparação de contato.
 
@@ -43,5 +43,6 @@ fluxo HTTP/controller/serviço, substituindo apenas a rede do provedor.
 
 Chromium foi exercitado automaticamente; Firefox e Safari não foram testados.
 A suite não certifica toda a acessibilidade nem a veracidade dos conteúdos
-acadêmicos. A chamada com credencial real fica para o proprietário da chave.
+acadêmicos. A chamada com credencial real foi bloqueada por falta de créditos;
+o resultado está em [teste-real-chat.md](teste-real-chat.md).
 O workflow GitHub Actions foi preparado, mas ainda não executou no remoto.

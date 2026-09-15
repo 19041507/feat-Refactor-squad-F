@@ -39,13 +39,19 @@ O provedor configurado é **OpenAI**, usando a Responses API. A chave precisa
 estar válida e a conta precisa ter acesso e saldo/cota para usar o modelo.
 Uma chave de outro provedor não funciona nesta integração.
 
-| Variável         | Padrão         | Função                             |
-| ---------------- | -------------- | ---------------------------------- |
-| `OPENAI_API_KEY` | vazia          | Credencial usada apenas no backend |
-| `OPENAI_MODEL`   | `gpt-4.1-mini` | Modelo da OpenAI                   |
-| `PORT`           | `3000`         | Porta HTTP                         |
-| `HOST`           | `127.0.0.1`    | Endereço local do servidor         |
-| `AI_TIMEOUT_MS`  | `30000`        | Tempo máximo da chamada de IA      |
+| Variável                | Padrão         | Função                                         |
+| ----------------------- | -------------- | ---------------------------------------------- |
+| `OPENAI_API_KEY`        | vazia          | Credencial usada apenas no backend             |
+| `OPENAI_MODEL`          | `gpt-4.1-mini` | Modelo principal                               |
+| `OPENAI_FAST_MODEL`     | `gpt-4o-mini`  | Modelo econômico para perguntas simples        |
+| `OPENAI_FALLBACK_MODEL` | vazio          | Alternativa opcional; vazio usa o outro modelo |
+| `AI_SIMPLE_TOKENS`      | `160`          | Limite de saída para perguntas simples         |
+| `AI_BRIEF_TOKENS`       | `360`          | Limite de saída padrão                         |
+| `AI_DETAILED_TOKENS`    | `800`          | Limite de saída com mais detalhes              |
+| `AI_CONTEXT_CHARS`      | `6000`         | Limite de caracteres das mensagens de contexto |
+| `PORT`                  | `3000`         | Porta HTTP                                     |
+| `HOST`                  | `127.0.0.1`    | Endereço local do servidor                     |
+| `AI_TIMEOUT_MS`         | `30000`        | Tempo máximo da chamada de IA                  |
 
 O `.env` está ignorado pelo Git e não é servido ao navegador. Variáveis
 definidas no terminal prevalecem sobre o `.env`. O site funciona sem chave;
@@ -68,9 +74,15 @@ npm run check
 | `npm run format:check` | Confere a formatação sem alterar arquivos          |
 | `npm run check`        | Formatação e todos os testes                       |
 
-Os testes não usam sua chave nem consomem a API real. Apenas o serviço externo
+As suítes de `npm run check` não usam sua chave nem consomem a API real. Apenas o serviço externo
 é substituído por respostas controladas. Há também um teste real do backend
 sem chave. O Playwright usa a porta 3107 e encerra o servidor ao terminar.
+
+**Teste real opcional:** `npm run test:live` usa sua chave e pode consumir créditos.
+Executa até três cenários curtos, para no primeiro erro e grava um relatório
+local em `test-results/chat-live.json`, ignorado pelo Git. Não faz parte do CI.
+Consulte [o funcionamento do chatbot](docs/chatbot.md) e
+[o resultado do teste real](docs/teste-real-chat.md).
 
 O workflow `.github/workflows/tests.yml` executará as verificações em pushes
 e pull requests quando você publicar o repositório no GitHub com Actions ativo.
@@ -107,8 +119,8 @@ Node Test Runner, Playwright e Prettier. Não há etapa de build ou banco de dad
 
 ## Comportamentos e limites
 
-- O chat aceita 2.000 caracteres por mensagem e envia os últimos cinco pares
-  de pergunta/resposta como contexto. Nova conversa e recarregamento limpam
+- O chat aceita 2.000 caracteres por mensagem e considera até cinco pares
+  de pergunta/resposta, compactados ao orçamento de contexto. Nova conversa e recarregamento limpam
   o histórico; não há armazenamento em banco ou no navegador.
 - São permitidas 20 requisições ao chat por minuto por IP, por processo.
 - Mensagens são enviadas à OpenAI com `store: false`. Isso não equivale a uma
@@ -148,6 +160,7 @@ seguintes usam o nome e e-mail informados por Daniel.
 - [Arquitetura](docs/arquitetura.md)
 - [Mudanças e refatoração](docs/refatoracao.md)
 - [Roteiro de testes e apresentação](docs/roteiro-de-testes.md)
+- [Personalidade, modelos e limites do chatbot](docs/chatbot.md)
 
 Integração baseada na [documentação de geração de texto da OpenAI](https://developers.openai.com/api/docs/guides/text)
 e na [documentação do GPT-4.1 mini](https://developers.openai.com/api/docs/models/gpt-4.1-mini).

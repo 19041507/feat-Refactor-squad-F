@@ -43,8 +43,10 @@ de segredos apenas no servidor e renderização segura de mensagens como texto.
 Um teste reproduziu a rejeição incorreta de histórico grande antes do ajuste
 do limite de corpo para 256 KB. Foram inspecionadas telas de home e chat.
 
-Não foi feita chamada paga à OpenAI. A integração real precisa ser validada
-com uma chave válida; testes externos usam respostas controladas.
+Após configurar a chave, foram feitas chamadas reais para verificar a integração.
+O provedor retornou HTTP 429 por falta de créditos e não gerou respostas.
+O detalhe está em [teste-real-chat.md](teste-real-chat.md). As suítes automatizadas
+continuam sem chamadas pagas e verificam o comportamento com respostas controladas.
 
 ## Histórico
 

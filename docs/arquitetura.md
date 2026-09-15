@@ -34,6 +34,8 @@ continua em HTML, com navegação alternativa quando JavaScript estiver desativa
 O chat envia mensagens para `POST /api/chat`. O servidor valida conteúdo e
 histórico antes de acessar a Responses API da OpenAI. A chave nunca vai para
 o navegador. Modelo padrão: `gpt-4.1-mini`, configurável no `.env`.
+Roteamento, personalidade e orçamento ficam em `services/chat-policy.js`;
+veja [chatbot.md](chatbot.md) para limites e alternativas de modelo.
 O histórico existe apenas na memória da página, limitado aos últimos turnos;
 as requisições usam `store: false`. Não há persistência local de conversas.
 
