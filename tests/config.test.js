@@ -16,3 +16,16 @@ test('configuração rejeita porta e timeout inválidos antes de iniciar', () =>
   }
   assert.throws(() => readConfig({ AI_TIMEOUT_MS: 'zero' }), /AI_TIMEOUT_MS/);
 });
+
+test('configura modelos e limites sem aceitar orçamento descontrolado', () => {
+  const config = readConfig({
+    OPENAI_FAST_MODEL: 'fast',
+    OPENAI_FALLBACK_MODEL: 'backup',
+    AI_BRIEF_TOKENS: '250',
+  });
+  assert.equal(config.fastModel, 'fast');
+  assert.equal(config.fallbackModel, 'backup');
+  assert.equal(config.briefTokens, 250);
+  assert.throws(() => readConfig({ AI_BRIEF_TOKENS: '999999' }), /AI_BRIEF_TOKENS/);
+  assert.throws(() => readConfig({ AI_CONTEXT_CHARS: '30' }), /AI_CONTEXT_CHARS/);
+});

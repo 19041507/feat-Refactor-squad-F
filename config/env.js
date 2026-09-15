@@ -12,10 +12,10 @@ export function loadLocalEnv() {
 }
 
 export function readConfig(env = process.env) {
-  const integer = (name, fallback, max) => {
+  const integer = (name, fallback, max, min = 1) => {
     const value = Number(env[name] || fallback);
-    if (!Number.isInteger(value) || value < 1 || value > max) {
-      throw new Error(`${name} deve ser um inteiro entre 1 e ${max}.`);
+    if (!Number.isInteger(value) || value < min || value > max) {
+      throw new Error(`${name} deve ser um inteiro entre ${min} e ${max}.`);
     }
     return value;
   };
@@ -24,6 +24,12 @@ export function readConfig(env = process.env) {
     host: env.HOST?.trim() || '127.0.0.1',
     apiKey: env.OPENAI_API_KEY?.trim() || '',
     model: env.OPENAI_MODEL?.trim() || 'gpt-4.1-mini',
+    fastModel: env.OPENAI_FAST_MODEL?.trim() || 'gpt-4o-mini',
+    fallbackModel: env.OPENAI_FALLBACK_MODEL?.trim() || '',
+    simpleTokens: integer('AI_SIMPLE_TOKENS', 160, 500, 64),
+    briefTokens: integer('AI_BRIEF_TOKENS', 360, 1000, 128),
+    detailedTokens: integer('AI_DETAILED_TOKENS', 800, 1600, 256),
+    contextChars: integer('AI_CONTEXT_CHARS', 6000, 12000, 4000),
     timeoutMs: integer('AI_TIMEOUT_MS', 30000, 120000),
   });
 }
