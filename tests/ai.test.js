@@ -181,3 +181,19 @@ test('timeout aborta tentativa travada e ainda permite alternativa dentro do pra
   assert.equal(await service(messages), 'Resposta alternativa.');
   assert.equal(calls, 2);
 });
+
+test('tipo insufficient_quota prevalece mesmo quando código específico é diferente', async () => {
+  let calls = 0;
+  const service = createAiService({ ...config, fastModel: 'fast' }, async () => {
+    calls++;
+    return Response.json(
+      { error: { code: 'credit_balance_exhausted', type: 'insufficient_quota' } },
+      { status: 429 },
+    );
+  });
+  await assert.rejects(
+    service(messages),
+    (error) => error.status === 429 && /cota/.test(error.message),
+  );
+  assert.equal(calls, 1);
+});

@@ -8,10 +8,16 @@ export class ChatError extends Error {
   }
 }
 
-function providerError(status, code) {
+function providerError(status, code, type) {
   if (status === 401)
     return new ChatError(503, 'A conexão com a IA precisa ser revisada. Tente mais tarde.');
-  if (['insufficient_quota', 'billing_hard_limit_reached', 'billing_not_active'].includes(code)) {
+  const quotaErrors = [
+    'insufficient_quota',
+    'credit_balance_exhausted',
+    'billing_hard_limit_reached',
+    'billing_not_active',
+  ];
+  if (quotaErrors.includes(code) || quotaErrors.includes(type)) {
     return new ChatError(429, 'O serviço de IA está sem cota disponível no momento.');
   }
   if (status === 429)
@@ -74,7 +80,7 @@ export function createAiService(config, fetchImpl = fetch) {
         });
         if (!response.ok) {
           const data = await response.json().catch(() => ({}));
-          throw providerError(response.status, data.error?.code || data.error?.type);
+          throw providerError(response.status, data.error?.code, data.error?.type);
         }
         return extractReply(await response.json());
       } catch (error) {

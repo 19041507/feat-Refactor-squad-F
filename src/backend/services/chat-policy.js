@@ -28,9 +28,14 @@ function compactContext(messages, maxChars) {
 
 export function planReply(messages, config, detail = 'brief') {
   const text = normalize(messages.at(-1).content);
+  const concise =
+    /\b(sem (?:mais )?detalhes|nao detalh\w*|nao quero detalhes|resuma|em (?:uma|1|duas|2) frases?|seja breve|resposta curta|direto ao ponto)\b/.test(
+      text,
+    );
   const detailed =
-    detail === 'detailed' ||
-    /\b(detalh\w*|passo a passo|aprofunde|com exemplos|codigo completo)\b/.test(text);
+    !concise &&
+    (detail === 'detailed' ||
+      /\b(detalh\w*|passo a passo|aprofunde|com exemplos|codigo completo)\b/.test(text));
   const greeting =
     /^(oi|ola|e ai|bom dia|boa tarde|boa noite|valeu|obrigad[oa]|tchau)[!.?\s]*$/.test(text);
   const definition =

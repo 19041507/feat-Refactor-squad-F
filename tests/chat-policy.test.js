@@ -56,3 +56,16 @@ test('fallback não repete o mesmo modelo e respeita alternativa configurada', (
     'backup',
   ]);
 });
+
+test('pedido explícito de concisão prevalece sobre palavra detalhes e preferência detalhada', () => {
+  for (const message of [
+    'Explique CSS sem detalhes',
+    'Não detalhe; responda em uma frase',
+    'Resuma os detalhes em uma frase',
+  ]) {
+    for (const preference of ['brief', 'detailed']) {
+      assert.equal(planReply(ask(message), config, preference).detail, 'brief');
+      assert.equal(planReply(ask(message), config, preference).maxTokens, 360);
+    }
+  }
+});
