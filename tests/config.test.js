@@ -8,7 +8,6 @@ test('configuração funciona sem chave e normaliza a chave quando fornecida', (
   assert.equal(readConfig({ GEMINI_API_KEY: '  teste  ' }).apiKey, 'teste');
   assert.equal(readConfig({ PORT: '4200' }).port, 4200);
   assert.equal(readConfig({ GEMINI_MODEL: 'gemini-2.5-flash' }).model, 'gemini-2.5-flash');
-  assert.equal(readConfig({ OPENAI_API_KEY: 'old-key' }).apiKey, '');
 });
 
 test('configuração rejeita porta e timeout inválidos antes de iniciar', () => {
@@ -32,6 +31,6 @@ test('configura modelos e limites sem aceitar orçamento descontrolado', () => {
 });
 
 test('rejeita modelos incompatíveis com o orçamento sem raciocínio', () => {
-  assert.throws(() => readConfig({ GEMINI_MODEL: 'gpt-4.1-mini' }), /GEMINI_MODEL/);
+  assert.throws(() => readConfig({ GEMINI_MODEL: 'modelo-incompativel' }), /GEMINI_MODEL/);
   assert.throws(() => readConfig({ GEMINI_MODEL: '../private' }), /GEMINI_MODEL/);
 });

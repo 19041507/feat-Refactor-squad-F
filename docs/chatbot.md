@@ -25,7 +25,7 @@ de tom ou número de palavras. O limite de saída em tokens é imposto na API.
 A escolha usa regras locais, sem consulta extra à IA. É uma heurística
 conservadora: pedidos não reconhecidos como simples usam o modelo principal.
 As variáveis estão no `.env.example`. Use uma chave Gemini em `GEMINI_API_KEY`.
-Chaves antigas da OpenAI são ignoradas. Os modelos aceitos são os dois da tabela;
+Os modelos aceitos são os dois da tabela;
 a configuração valida esses nomes para garantir compatibilidade com os limites.
 
 ## Controle de consumo

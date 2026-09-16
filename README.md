@@ -38,7 +38,6 @@ No Linux/macOS: `cp .env.example .env`.
 O provedor configurado é **Google Gemini**, usando a API generateContent. A chave precisa
 estar válida e a conta precisa ter acesso e saldo/cota para usar o modelo.
 Crie sua chave no [Google AI Studio](https://aistudio.google.com/apikey).
-A antiga chave OpenAI não funciona nesta integração e não é utilizada.
 Os modelos aceitos são `gemini-2.5-flash` e `gemini-2.5-flash-lite`.
 
 | Variável                | Padrão                  | Função                                         |
