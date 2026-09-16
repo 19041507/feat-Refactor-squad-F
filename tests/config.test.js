@@ -7,7 +7,7 @@ test('configuração funciona sem chave e normaliza a chave quando fornecida', (
   assert.equal(readConfig({}).apiKey, '');
   assert.equal(readConfig({ GEMINI_API_KEY: '  teste  ' }).apiKey, 'teste');
   assert.equal(readConfig({ PORT: '4200' }).port, 4200);
-  assert.equal(readConfig({ GEMINI_MODEL: 'gemini-2.5-flash' }).model, 'gemini-2.5-flash');
+  assert.equal(readConfig({ GEMINI_MODEL: 'gemini-3.6-flash' }).model, 'gemini-3.6-flash');
 });
 
 test('configuração rejeita porta e timeout inválidos antes de iniciar', () => {
@@ -19,18 +19,18 @@ test('configuração rejeita porta e timeout inválidos antes de iniciar', () =>
 
 test('configura modelos e limites sem aceitar orçamento descontrolado', () => {
   const config = readConfig({
-    GEMINI_FAST_MODEL: 'gemini-2.5-flash-lite',
-    GEMINI_FALLBACK_MODEL: 'gemini-2.5-flash',
+    GEMINI_FAST_MODEL: 'gemini-3.5-flash-lite',
+    GEMINI_FALLBACK_MODEL: 'gemini-3.6-flash',
     AI_BRIEF_TOKENS: '250',
   });
-  assert.equal(config.fastModel, 'gemini-2.5-flash-lite');
-  assert.equal(config.fallbackModel, 'gemini-2.5-flash');
+  assert.equal(config.fastModel, 'gemini-3.5-flash-lite');
+  assert.equal(config.fallbackModel, 'gemini-3.6-flash');
   assert.equal(config.briefTokens, 250);
   assert.throws(() => readConfig({ AI_BRIEF_TOKENS: '999999' }), /AI_BRIEF_TOKENS/);
   assert.throws(() => readConfig({ AI_CONTEXT_CHARS: '30' }), /AI_CONTEXT_CHARS/);
 });
 
-test('rejeita modelos incompatíveis com o orçamento sem raciocínio', () => {
+test('rejeita modelos incompatíveis com o configuração de raciocínio', () => {
   assert.throws(() => readConfig({ GEMINI_MODEL: 'modelo-incompativel' }), /GEMINI_MODEL/);
   assert.throws(() => readConfig({ GEMINI_MODEL: '../private' }), /GEMINI_MODEL/);
 });

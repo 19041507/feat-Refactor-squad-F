@@ -101,9 +101,11 @@ export function createAiService(config, fetchImpl = fetch) {
                 parts: [{ text: message.content }],
               })),
               generationConfig: {
-                candidateCount: 1,
-                maxOutputTokens: plan.maxTokens,
-                thinkingConfig: { thinkingBudget: 0 },
+                // Flash shares the output budget with internal reasoning.
+                maxOutputTokens: plan.maxTokens + (model === 'gemini-3.6-flash' ? 2048 : 0),
+                thinkingConfig: {
+                  thinkingLevel: model === 'gemini-3.5-flash-lite' ? 'minimal' : 'medium',
+                },
               },
             }),
             signal: AbortSignal.timeout(attemptMs),

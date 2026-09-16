@@ -149,6 +149,6 @@ test('preferência de detalhe controla orçamento e rejeita opções desconhecid
     (await request('/api/chat', { message: 'O que é HTML?', detail: 'detailed' })).status,
     200,
   );
-  assert.equal(budget, 800);
+  assert.equal(budget, 2848);
   assert.equal((await request('/api/chat', { message: 'Oi', detail: 'unlimited' })).status, 400);
 });

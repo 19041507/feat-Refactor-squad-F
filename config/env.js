@@ -21,8 +21,8 @@ export function readConfig(env = process.env) {
   };
   const model = (name, fallback) => {
     const value = env[name]?.trim() || fallback;
-    if (value && !['gemini-2.5-flash', 'gemini-2.5-flash-lite'].includes(value)) {
-      throw new Error(name + ' deve ser gemini-2.5-flash ou gemini-2.5-flash-lite.');
+    if (value && !['gemini-3.6-flash', 'gemini-3.5-flash-lite'].includes(value)) {
+      throw new Error(name + ' deve ser gemini-3.6-flash ou gemini-3.5-flash-lite.');
     }
     return value;
   };
@@ -30,8 +30,8 @@ export function readConfig(env = process.env) {
     port: integer('PORT', 3000, 65535),
     host: env.HOST?.trim() || '127.0.0.1',
     apiKey: env.GEMINI_API_KEY?.trim() || '',
-    model: model('GEMINI_MODEL', 'gemini-2.5-flash'),
-    fastModel: model('GEMINI_FAST_MODEL', 'gemini-2.5-flash-lite'),
+    model: model('GEMINI_MODEL', 'gemini-3.6-flash'),
+    fastModel: model('GEMINI_FAST_MODEL', 'gemini-3.5-flash-lite'),
     fallbackModel: model('GEMINI_FALLBACK_MODEL', ''),
     simpleTokens: integer('AI_SIMPLE_TOKENS', 160, 500, 64),
     briefTokens: integer('AI_BRIEF_TOKENS', 360, 1000, 128),

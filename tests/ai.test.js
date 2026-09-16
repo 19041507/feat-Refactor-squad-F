@@ -21,7 +21,7 @@ test('Gemini recebe modelo, contexto e chave apenas no servidor', async () => {
     'https://generativelanguage.googleapis.com/v1beta/models/test-model:generateContent',
   );
   assert.equal(request.headers['x-goog-api-key'], 'test-key-not-real');
-  assert.equal(request.body.generationConfig.thinkingConfig.thinkingBudget, 0);
+  assert.equal(request.body.generationConfig.thinkingConfig.thinkingLevel, 'medium');
   assert.deepEqual(request.body.contents, [
     { role: 'user', parts: [{ text: messages[0].content }] },
   ]);
@@ -287,3 +287,26 @@ for (const kind of ['seconds', 'date']) {
     assert.equal(calls, 1);
   });
 }
+
+test('Flash-Lite usa raciocínio mínimo sem parâmetros removidos', async () => {
+  const service = createAiService(
+    { ...config, model: 'gemini-3.5-flash-lite' },
+    async (_, options) => {
+      const body = JSON.parse(options.body);
+      assert.deepEqual(body.generationConfig.thinkingConfig, { thinkingLevel: 'minimal' });
+      assert.equal('candidateCount' in body.generationConfig, false);
+      assert.equal('temperature' in body.generationConfig, false);
+      return Response.json(result([{ text: 'Oi!' }]));
+    },
+  );
+  assert.equal(await service(messages), 'Oi!');
+});
+
+test('Flash reserva tokens para raciocínio sem reduzir espaço da resposta', async () => {
+  const service = createAiService({ ...config, model: 'gemini-3.6-flash' }, async (_, options) => {
+    const body = JSON.parse(options.body);
+    assert.equal(body.generationConfig.maxOutputTokens, 2408);
+    return Response.json(result([{ text: 'Separe os arquivos por responsabilidade.' }]));
+  });
+  await service(messages);
+});
