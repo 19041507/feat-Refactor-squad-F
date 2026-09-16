@@ -32,12 +32,13 @@ Cabeçalho e rodapé compartilhados por módulo JavaScript; conteúdo principal
 continua em HTML, com navegação alternativa quando JavaScript estiver desativado.
 
 O chat envia mensagens para `POST /api/chat`. O servidor valida conteúdo e
-histórico antes de acessar a Responses API da OpenAI. A chave nunca vai para
-o navegador. Modelo padrão: `gpt-4.1-mini`, configurável no `.env`.
+histórico antes de acessar a API generateContent do Google Gemini. A chave nunca vai para
+o navegador. Modelo padrão: `gemini-2.5-flash`, configurável no `.env`.
 Roteamento, personalidade e orçamento ficam em `services/chat-policy.js`;
 veja [chatbot.md](chatbot.md) para limites e alternativas de modelo.
 O histórico existe apenas na memória da página, limitado aos últimos turnos;
-as requisições usam `store: false`. Não há persistência local de conversas.
+não há persistência local de conversas. O tratamento pelo provedor segue os
+termos do Google Gemini e a modalidade da conta.
 
 Apenas frontend e assets são públicos. Configuração, documentação, testes,
 metadados e `.env` não são servidos. O servidor escuta em localhost por padrão.
@@ -52,5 +53,5 @@ Sem chave, o site continua funcionando e o chat informa indisponibilidade.
 ## Referências consultadas
 
 - PDF fornecido: páginas 3–11 (organização), 12–16 (refatoração) e 18 (atividade).
-- https://developers.openai.com/api/docs/guides/text
-- https://developers.openai.com/api/docs/models/gpt-4.1-mini
+- https://ai.google.dev/api/generate-content
+- https://ai.google.dev/gemini-api/docs/models/gemini-2.5-flash

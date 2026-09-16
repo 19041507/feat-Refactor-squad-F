@@ -14,13 +14,13 @@ As suítes cobrem:
   teclado, chat, texto HTML inofensivo, contexto, nova conversa, falha
   recuperável, prevenção de envio duplo e preparação de contato.
 
-Os testes usam portas locais e não chamam a OpenAI. Os testes de navegador
+Os testes usam portas locais e não chamam o Google Gemini. Os testes de navegador
 de sucesso substituem a resposta HTTP do chat; os testes Node verificam o
 fluxo HTTP/controller/serviço, substituindo apenas a rede do provedor.
 
 ## Verificação manual com chave real
 
-1. Preencher `OPENAI_API_KEY` no `.env` e reiniciar `npm start`.
+1. Preencher `GEMINI_API_KEY` no `.env` e reiniciar `npm start`.
 2. Abrir http://127.0.0.1:3000/pages/chat.html.
 3. Perguntar “O que é refatoração?” e conferir a resposta real.
 4. Perguntar “Dê um exemplo disso em HTML” para verificar o contexto.

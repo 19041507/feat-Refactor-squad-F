@@ -22,7 +22,7 @@ individual, vale 1,0 ponto e indica entrega em 17/09, sem ano no slide.
 | Nomes genéricos na página Sobre                    | Nomes e funções alinhados com a home original                        |
 | Conteúdo de clientes sem comprovação               | Identificação de demonstração acadêmica                              |
 | Contato com endereço de exemplo                    | Preparação e cópia de mensagem, com aviso explícito de que não envia |
-| Sem chat                                           | Interface e backend com integração OpenAI                            |
+| Sem chat                                           | Interface e backend com integração Google Gemini                     |
 | Sem testes ou documentação                         | Suítes Node/Playwright, README e documentação                        |
 
 ## O que é refatoração nesta entrega

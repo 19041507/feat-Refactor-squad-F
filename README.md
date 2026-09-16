@@ -24,7 +24,7 @@ que sirva a raiz inteira do repositório não executa o backend do chat.
 Nesta cópia local, o `.env` já está criado. Preencha apenas:
 
 ```dotenv
-OPENAI_API_KEY=sua_chave_da_openai
+GEMINI_API_KEY=sua_chave_do_gemini
 ```
 
 Salve e reinicie `npm start`. Em um novo clone, crie primeiro o arquivo:
@@ -35,23 +35,25 @@ Copy-Item .env.example .env
 
 No Linux/macOS: `cp .env.example .env`.
 
-O provedor configurado é **OpenAI**, usando a Responses API. A chave precisa
+O provedor configurado é **Google Gemini**, usando a API generateContent. A chave precisa
 estar válida e a conta precisa ter acesso e saldo/cota para usar o modelo.
-Uma chave de outro provedor não funciona nesta integração.
+Crie sua chave no [Google AI Studio](https://aistudio.google.com/apikey).
+A antiga chave OpenAI não funciona nesta integração e não é utilizada.
+Os modelos aceitos são `gemini-2.5-flash` e `gemini-2.5-flash-lite`.
 
-| Variável                | Padrão         | Função                                         |
-| ----------------------- | -------------- | ---------------------------------------------- |
-| `OPENAI_API_KEY`        | vazia          | Credencial usada apenas no backend             |
-| `OPENAI_MODEL`          | `gpt-4.1-mini` | Modelo principal                               |
-| `OPENAI_FAST_MODEL`     | `gpt-4o-mini`  | Modelo econômico para perguntas simples        |
-| `OPENAI_FALLBACK_MODEL` | vazio          | Alternativa opcional; vazio usa o outro modelo |
-| `AI_SIMPLE_TOKENS`      | `160`          | Limite de saída para perguntas simples         |
-| `AI_BRIEF_TOKENS`       | `360`          | Limite de saída padrão                         |
-| `AI_DETAILED_TOKENS`    | `800`          | Limite de saída com mais detalhes              |
-| `AI_CONTEXT_CHARS`      | `6000`         | Limite de caracteres das mensagens de contexto |
-| `PORT`                  | `3000`         | Porta HTTP                                     |
-| `HOST`                  | `127.0.0.1`    | Endereço local do servidor                     |
-| `AI_TIMEOUT_MS`         | `30000`        | Tempo máximo da chamada de IA                  |
+| Variável                | Padrão                  | Função                                         |
+| ----------------------- | ----------------------- | ---------------------------------------------- |
+| `GEMINI_API_KEY`        | vazia                   | Credencial usada apenas no backend             |
+| `GEMINI_MODEL`          | `gemini-2.5-flash`      | Modelo principal                               |
+| `GEMINI_FAST_MODEL`     | `gemini-2.5-flash-lite` | Modelo econômico para perguntas simples        |
+| `GEMINI_FALLBACK_MODEL` | vazio                   | Alternativa opcional; vazio usa o outro modelo |
+| `AI_SIMPLE_TOKENS`      | `160`                   | Limite de saída para perguntas simples         |
+| `AI_BRIEF_TOKENS`       | `360`                   | Limite de saída padrão                         |
+| `AI_DETAILED_TOKENS`    | `800`                   | Limite de saída com mais detalhes              |
+| `AI_CONTEXT_CHARS`      | `6000`                  | Limite de caracteres das mensagens de contexto |
+| `PORT`                  | `3000`                  | Porta HTTP                                     |
+| `HOST`                  | `127.0.0.1`             | Endereço local do servidor                     |
+| `AI_TIMEOUT_MS`         | `30000`                 | Tempo máximo da chamada de IA                  |
 
 O `.env` está ignorado pelo Git e não é servido ao navegador. Variáveis
 definidas no terminal prevalecem sobre o `.env`. O site funciona sem chave;
@@ -114,7 +116,7 @@ squad-f/
 └── README.md
 ```
 
-Tecnologias: HTML5, CSS3, JavaScript, Node.js, Express, OpenAI Responses API,
+Tecnologias: HTML5, CSS3, JavaScript, Node.js, Express, Google Gemini API,
 Node Test Runner, Playwright e Prettier. Não há etapa de build ou banco de dados.
 
 ## Comportamentos e limites
@@ -123,8 +125,8 @@ Node Test Runner, Playwright e Prettier. Não há etapa de build ou banco de dad
   de pergunta/resposta, compactados ao orçamento de contexto. Nova conversa e recarregamento limpam
   o histórico; não há armazenamento em banco ou no navegador.
 - São permitidas 20 requisições ao chat por minuto por IP, por processo.
-- Mensagens são enviadas à OpenAI com `store: false`. Isso não equivale a uma
-  garantia de retenção zero pelo provedor.
+- Mensagens são enviadas ao Google Gemini. O tratamento de dados pelo provedor
+  depende dos termos e da modalidade da conta; não há garantia de retenção zero.
 - A aplicação foi preparada para execução local e apresentação acadêmica.
   Publicação aberta exige planejar autenticação e limites globais de uso.
 - O formulário de contato **prepara e copia texto**. Não envia e-mail e não
@@ -162,5 +164,4 @@ seguintes usam o nome e e-mail informados por Daniel.
 - [Roteiro de testes e apresentação](docs/roteiro-de-testes.md)
 - [Personalidade, modelos e limites do chatbot](docs/chatbot.md)
 
-Integração baseada na [documentação de geração de texto da OpenAI](https://developers.openai.com/api/docs/guides/text)
-e na [documentação do GPT-4.1 mini](https://developers.openai.com/api/docs/models/gpt-4.1-mini).
+Integração baseada na [documentação oficial do Gemini](https://ai.google.dev/api/generate-content).

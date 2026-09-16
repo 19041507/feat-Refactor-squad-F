@@ -7,7 +7,7 @@ import { createApp } from '../src/backend/app.js';
 loadLocalEnv();
 const config = readConfig();
 if (!config.apiKey) {
-  console.error('Preencha OPENAI_API_KEY no .env antes do teste real.');
+  console.error('Preencha GEMINI_API_KEY no .env antes do teste real.');
   process.exit(1);
 }
 const report = { date: new Date().toISOString(), cases: [] };
@@ -21,16 +21,19 @@ const measuredFetch = async (url, options) => {
     .json()
     .catch(() => ({}));
   calls.push({
-    model: payload.model,
+    model: new URL(url).pathname.split('/models/')[1]?.split(':')[0],
     status: response.status,
     milliseconds: Date.now() - start,
-    maxOutputTokens: payload.max_output_tokens,
-    inputCharacters: payload.input.reduce((sum, m) => sum + m.content.length, 0),
-    usage: result.usage
+    maxOutputTokens: payload.generationConfig.maxOutputTokens,
+    inputCharacters: payload.contents.reduce(
+      (sum, m) => sum + m.parts.reduce((n, p) => n + (p.text?.length || 0), 0),
+      0,
+    ),
+    usage: result.usageMetadata
       ? {
-          input: result.usage.input_tokens,
-          output: result.usage.output_tokens,
-          total: result.usage.total_tokens,
+          input: result.usageMetadata.promptTokenCount,
+          output: result.usageMetadata.candidatesTokenCount,
+          total: result.usageMetadata.totalTokenCount,
         }
       : null,
   });

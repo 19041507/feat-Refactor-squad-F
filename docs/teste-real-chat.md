@@ -1,3 +1,12 @@
+# Migração para Gemini
+
+A integração atual usa Google Gemini. Os testes automatizados usam respostas
+controladas, sem chamadas externas. A geração real com Gemini ainda depende
+de preencher `GEMINI_API_KEY` no `.env` e executar `npm run test:live`.
+
+O registro abaixo é histórico da integração OpenAI anterior; não descreve a
+cota nem o funcionamento da conta Gemini.
+
 # Teste real do chatbot — 15/09/2026
 
 Foi utilizada a credencial fornecida no `.env`, sem exibir seu conteúdo.
