@@ -5,7 +5,7 @@ loadLocalEnv();
 const config = readConfig();
 const server = createApp({ config }).listen(config.port, config.host, () => {
   console.log(`Squad F: http://${config.host}:${config.port}`);
-  if (!config.apiKey) console.log('Chat pendente: preencha OPENAI_API_KEY no .env e reinicie.');
+  if (!config.apiKey) console.log('Chat pendente: preencha GEMINI_API_KEY no .env e reinicie.');
 });
 server.on('error', (error) => {
   console.error(

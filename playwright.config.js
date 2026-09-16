@@ -14,6 +14,6 @@ export default defineConfig({
     command: 'node src/backend/server.js',
     url: 'http://127.0.0.1:3107/api/health',
     reuseExistingServer: false,
-    env: { PORT: '3107', HOST: '127.0.0.1', OPENAI_API_KEY: '' },
+    env: { PORT: '3107', HOST: '127.0.0.1', GEMINI_API_KEY: '' },
   },
 });
