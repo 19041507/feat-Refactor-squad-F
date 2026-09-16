@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { planReply } from '../src/backend/services/chat-policy.js';
+import { planReply, buildInstructions } from '../src/backend/services/chat-policy.js';
 
 const config = {
   model: 'standard',
@@ -68,4 +68,23 @@ test('pedido explícito de concisão prevalece sobre palavra detalhes e preferê
       assert.equal(planReply(ask(message), config, preference).maxTokens, 360);
     }
   }
+});
+
+test('perguntas diretas do portfólio usam modelo econômico', () => {
+  for (const question of [
+    'Quem é o Squad F?',
+    'Quem faz parte da equipe?',
+    'Quem é Daniel Augusto?',
+    'Quais serviços vocês oferecem?',
+  ]) {
+    assert.equal(planReply(ask(question), config).models[0], 'fast');
+  }
+});
+test('instruções apresentam equipe e delimitam atuação ao portfólio', () => {
+  const instructions = buildInstructions('brief');
+  for (const name of ['Daniel Augusto', 'Edson', 'Felipe', 'Elisson'])
+    assert.ok(instructions.includes(name));
+  assert.match(instructions, /Não escreva código/);
+  assert.match(instructions, /formulário.*não envia/s);
+  assert.doesNotMatch(instructions, /Ajude com dúvidas gerais/);
 });
