@@ -1,5 +1,18 @@
 # Fê — chatbot do Squad F
 
+## Papel no portfólio
+
+Fê é a anfitriã virtual do Squad F. Apresenta Daniel Augusto (Front-end Lead),
+Edson (Back-end Developer), Felipe (Designer UI/UX) e Elisson (Gerente de Projetos).
+Explica projetos e serviços publicados e indica as seções do menu. Sua base de
+informações fica em `buildInstructions`, em `services/chat-policy.js`, e deve
+ser revisada quando o portfólio mudar.
+
+Não oferece aulas, escrita ou correção de código. Pedidos fora desse foco recebem
+um redirecionamento breve para o portfólio. Não inventa biografias, canais de
+contato, clientes, preços ou prazos. O escopo é orientado por instruções ao modelo;
+os testes reais verificam exemplos, mas não garantem toda resposta futura.
+
 ## Personalidade e respostas
 
 Fê conversa em português brasileiro, com tom de colega: descontraído, direto
@@ -71,7 +84,7 @@ Os detalhes internos dos erros e a chave não são enviados ao navegador.
 ## Testar
 
 - `npm run check`: testes isolados, sem créditos ou chamadas externas.
-- `npm run test:live`: integração real, com até três cenários e relatório local
+- `npm run test:live`: integração real, com até quatro cenários e relatório local
   de modelos, duração, tokens reportados e respostas; para no primeiro erro.
 
 Documentação consultada: [Gemini generateContent](https://ai.google.dev/api/generate-content) e

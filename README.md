@@ -80,7 +80,7 @@ As suítes de `npm run check` não usam sua chave nem consomem a API real. Apena
 sem chave. O Playwright usa a porta 3107 e encerra o servidor ao terminar.
 
 **Teste real opcional:** `npm run test:live` usa sua chave e pode consumir créditos.
-Executa até três cenários curtos, para no primeiro erro e grava um relatório
+Executa até quatro cenários curtos, para no primeiro erro e grava um relatório
 local em `test-results/chat-live.json`, ignorado pelo Git. Não faz parte do CI.
 Consulte [o funcionamento do chatbot](docs/chatbot.md) e
 [o resultado do teste real](docs/teste-real-chat.md).
