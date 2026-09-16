@@ -18,9 +18,9 @@ de tom ou número de palavras. O limite de saída em tokens é imposto na API.
 
 | Situação                                                    | Modelo padrão           | Limite de saída |
 | ----------------------------------------------------------- | ----------------------- | --------------- |
-| Saudações isoladas e definições simples reconhecidas        | `gemini-2.5-flash-lite` | 160 tokens      |
-| Pedidos gerais, código e perguntas que dependem do contexto | `gemini-2.5-flash`      | 360 tokens      |
-| Mais detalhes solicitados                                   | `gemini-2.5-flash`      | 800 tokens      |
+| Saudações isoladas e definições simples reconhecidas        | `gemini-3.5-flash-lite` | 160 tokens      |
+| Pedidos gerais, código e perguntas que dependem do contexto | `gemini-3.6-flash`      | 360 tokens      |
+| Mais detalhes solicitados                                   | `gemini-3.6-flash`      | 800 tokens      |
 
 A escolha usa regras locais, sem consulta extra à IA. É uma heurística
 conservadora: pedidos não reconhecidos como simples usam o modelo principal.
@@ -28,9 +28,15 @@ As variáveis estão no `.env.example`. Use uma chave Gemini em `GEMINI_API_KEY`
 Os modelos aceitos são os dois da tabela;
 a configuração valida esses nomes para garantir compatibilidade com os limites.
 
+O Flash recebe uma reserva adicional de 2.048 tokens para raciocínio interno,
+pois esse processamento compartilha o limite de geração. Os valores da tabela
+são a base da resposta; o teto total enviado ao Flash é base + 2.048. A divisão
+entre raciocínio e texto é controlada pelo provedor, sem garantia de palavras.
+O Flash-Lite mantém o limite da tabela.
+
 ## Controle de consumo
 
-- Raciocínio adicional desativado com `thinkingBudget: 0` nos dois modelos.
+- Raciocínio `minimal` no Flash-Lite e `medium` no Flash, conforme suporte dos modelos.
 - Uma chamada em caso de sucesso; no máximo duas em caso de falha recuperável.
 - Sem resposta intermediária de IA para classificar ou resumir o histórico.
 - Até cinco pares recentes e 6.000 caracteres de mensagens no total, incluindo

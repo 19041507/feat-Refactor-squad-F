@@ -15,7 +15,18 @@ let calls = [];
 const measuredFetch = async (url, options) => {
   const payload = JSON.parse(options.body);
   const start = Date.now();
-  const response = await fetch(url, options);
+  let response;
+  try {
+    response = await fetch(url, options);
+  } catch (error) {
+    calls.push({
+      model: new URL(url).pathname.split('/models/')[1]?.split(':')[0],
+      status: null,
+      milliseconds: Date.now() - start,
+      error: ['TimeoutError', 'AbortError'].includes(error.name) ? 'timeout' : 'network',
+    });
+    throw error;
+  }
   const result = await response
     .clone()
     .json()
@@ -23,6 +34,7 @@ const measuredFetch = async (url, options) => {
   calls.push({
     model: new URL(url).pathname.split('/models/')[1]?.split(':')[0],
     status: response.status,
+    finishReason: result.candidates?.[0]?.finishReason || null,
     milliseconds: Date.now() - start,
     maxOutputTokens: payload.generationConfig.maxOutputTokens,
     inputCharacters: payload.contents.reduce(
@@ -33,6 +45,7 @@ const measuredFetch = async (url, options) => {
       ? {
           input: result.usageMetadata.promptTokenCount,
           output: result.usageMetadata.candidatesTokenCount,
+          thinking: result.usageMetadata.thoughtsTokenCount || 0,
           total: result.usageMetadata.totalTokenCount,
         }
       : null,

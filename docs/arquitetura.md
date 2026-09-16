@@ -33,7 +33,7 @@ continua em HTML, com navegação alternativa quando JavaScript estiver desativa
 
 O chat envia mensagens para `POST /api/chat`. O servidor valida conteúdo e
 histórico antes de acessar a API generateContent do Google Gemini. A chave nunca vai para
-o navegador. Modelo padrão: `gemini-2.5-flash`, configurável no `.env`.
+o navegador. Modelo padrão: `gemini-3.6-flash`, configurável no `.env`.
 Roteamento, personalidade e orçamento ficam em `services/chat-policy.js`;
 veja [chatbot.md](chatbot.md) para limites e alternativas de modelo.
 O histórico existe apenas na memória da página, limitado aos últimos turnos;
@@ -54,4 +54,4 @@ Sem chave, o site continua funcionando e o chat informa indisponibilidade.
 
 - PDF fornecido: páginas 3–11 (organização), 12–16 (refatoração) e 18 (atividade).
 - https://ai.google.dev/api/generate-content
-- https://ai.google.dev/gemini-api/docs/models/gemini-2.5-flash
+- https://ai.google.dev/gemini-api/docs/models/gemini-3.6-flash

@@ -38,13 +38,13 @@ No Linux/macOS: `cp .env.example .env`.
 O provedor configurado é **Google Gemini**, usando a API generateContent. A chave precisa
 estar válida e a conta precisa ter acesso e saldo/cota para usar o modelo.
 Crie sua chave no [Google AI Studio](https://aistudio.google.com/apikey).
-Os modelos aceitos são `gemini-2.5-flash` e `gemini-2.5-flash-lite`.
+Os modelos aceitos são `gemini-3.6-flash` e `gemini-3.5-flash-lite`.
 
 | Variável                | Padrão                  | Função                                         |
 | ----------------------- | ----------------------- | ---------------------------------------------- |
 | `GEMINI_API_KEY`        | vazia                   | Credencial usada apenas no backend             |
-| `GEMINI_MODEL`          | `gemini-2.5-flash`      | Modelo principal                               |
-| `GEMINI_FAST_MODEL`     | `gemini-2.5-flash-lite` | Modelo econômico para perguntas simples        |
+| `GEMINI_MODEL`          | `gemini-3.6-flash`      | Modelo principal                               |
+| `GEMINI_FAST_MODEL`     | `gemini-3.5-flash-lite` | Modelo econômico para perguntas simples        |
 | `GEMINI_FALLBACK_MODEL` | vazio                   | Alternativa opcional; vazio usa o outro modelo |
 | `AI_SIMPLE_TOKENS`      | `160`                   | Limite de saída para perguntas simples         |
 | `AI_BRIEF_TOKENS`       | `360`                   | Limite de saída padrão                         |

@@ -12,3 +12,17 @@ Para verificar a geração real:
 O comando executa até três cenários e para no primeiro erro. O relatório
 registra modelo, status HTTP, duração e consumo informado pelo provedor,
 sem registrar a chave. Uma execução com erro não comprova geração bem-sucedida.
+
+## Validação após atualização dos modelos
+
+Os três cenários reais retornaram HTTP 200 e término STOP: saudação, orientação
+curta e explicação com contexto. O Flash-Lite respondeu aos três. Nas duas
+últimas perguntas, a tentativa com Flash excedeu o prazo e a alternativa
+Flash-Lite entregou respostas completas. Isso valida o fallback, mas não garante
+que o Flash conclua todas as perguntas dentro do prazo atual.
+
+A primeira execução revelou corte de texto porque o raciocínio do Flash
+compartilha o limite de geração. Foi adicionada uma reserva limitada de 2.048
+tokens para esse modelo, mantendo a orientação de respostas curtas.
+
+Validação automatizada: 49 testes Node e 32 testes de navegador aprovados.
