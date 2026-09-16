@@ -8,47 +8,70 @@ export class ChatError extends Error {
   }
 }
 
-function providerError(status, code, type) {
-  if (status === 401)
+function providerError(response, data) {
+  const status = response.status;
+  const details = Array.isArray(data?.error?.details) ? data.error.details : [];
+  if ([400, 401, 403].includes(status))
     return new ChatError(503, 'A conexão com a IA precisa ser revisada. Tente mais tarde.');
-  const quotaErrors = [
-    'insufficient_quota',
-    'credit_balance_exhausted',
-    'billing_hard_limit_reached',
-    'billing_not_active',
-  ];
-  if (quotaErrors.includes(code) || quotaErrors.includes(type)) {
-    return new ChatError(429, 'O serviço de IA está sem cota disponível no momento.');
+  if (status === 429) {
+    const exhausted = details.some(
+      (item) =>
+        item['@type']?.endsWith('/google.rpc.QuotaFailure') &&
+        item.violations?.some(
+          (v) => /PerDay/i.test(v.quotaId || '') || String(v.quotaValue) === '0',
+        ),
+    );
+    if (exhausted)
+      return new ChatError(429, 'O serviço de IA está sem cota disponível no momento.');
+    const error = new ChatError(
+      429,
+      'A IA está recebendo muitas mensagens. Tente daqui a pouco.',
+      true,
+    );
+    const retry = details.find((item) =>
+      item['@type']?.endsWith('/google.rpc.RetryInfo'),
+    )?.retryDelay;
+    const header = response.headers.get('retry-after');
+    const delay =
+      typeof retry === 'string' && /^\d+(\.\d+)?s$/.test(retry) ? parseFloat(retry) * 1000 : 0;
+    const headerDelay =
+      header === null
+        ? 0
+        : /^\d+(\.\d+)?$/.test(header)
+          ? Number(header) * 1000
+          : Date.parse(header) - Date.now();
+    error.retryAfterMs = Math.max(delay, Number.isFinite(headerDelay) ? headerDelay : 0, 0);
+    return error;
   }
-  if (status === 429)
-    return new ChatError(429, 'A IA está recebendo muitas mensagens. Tente daqui a pouco.', true);
-  if ([403, 404].includes(status))
-    return new ChatError(503, 'Os modelos de IA estão indisponíveis no momento.', true);
   return new ChatError(
-    502,
+    status === 404 ? 503 : 502,
     'Não consegui consultar a IA agora. Tente novamente.',
-    status >= 500 || status === 408,
+    status === 404 || status === 408 || status >= 500,
   );
 }
 
 function extractReply(data) {
-  const partial =
-    data.status === 'incomplete' && data.incomplete_details?.reason === 'max_output_tokens';
-  if ((!partial && data.status !== 'completed') || !Array.isArray(data.output)) {
-    throw new ChatError(502, 'A IA não concluiu a resposta. Tente novamente.', true);
-  }
-  const text = data.output
-    .filter((item) => item.type === 'message' && item.role === 'assistant')
-    .flatMap((item) => (Array.isArray(item.content) ? item.content : []))
-    .map((item) =>
-      item.type === 'output_text' ? item.text : item.type === 'refusal' ? item.refusal : '',
+  const candidate = data?.candidates?.[0];
+  const reason = candidate?.finishReason;
+  if (
+    data?.promptFeedback?.blockReason ||
+    ['SAFETY', 'RECITATION', 'BLOCKLIST', 'PROHIBITED_CONTENT', 'SPII', 'IMAGE_SAFETY'].includes(
+      reason,
     )
-    .filter((value) => typeof value === 'string' && value.trim())
-    .join('\n')
+  ) {
+    return 'Não consigo responder a esse pedido. Pode reformular a pergunta?';
+  }
+  if (!['STOP', 'MAX_TOKENS'].includes(reason))
+    throw new ChatError(502, 'A IA não concluiu a resposta. Tente novamente.', true);
+  const parts = candidate?.content?.parts;
+  const text = (Array.isArray(parts) ? parts : [])
+    .filter((part) => part.thought !== true && typeof part.text === 'string')
+    .map((part) => part.text)
+    .join('')
     .trim();
   if (!text) throw new ChatError(502, 'A IA retornou uma resposta vazia. Tente novamente.', true);
-  return partial
-    ? `${text}\n\nAtingi o limite desta resposta. Peça para continuar se precisar.`
+  return reason === 'MAX_TOKENS'
+    ? text + '\n\nAtingi o limite desta resposta. Peça para continuar se precisar.'
     : text;
 }
 
@@ -66,21 +89,29 @@ export function createAiService(config, fetchImpl = fetch) {
       // Reserve time for the alternative, without exceeding the total request budget.
       const attemptMs = Math.max(1, Math.floor(remaining / (plan.models.length - index)));
       try {
-        const response = await fetchImpl('https://api.openai.com/v1/responses', {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${config.apiKey}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model,
-            instructions: buildInstructions(plan.detail),
-            input: plan.input,
-            max_output_tokens: plan.maxTokens,
-            store: false,
-          }),
-          signal: AbortSignal.timeout(attemptMs),
-        });
+        const response = await fetchImpl(
+          `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
+          {
+            method: 'POST',
+            headers: { 'x-goog-api-key': config.apiKey, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              systemInstruction: { parts: [{ text: buildInstructions(plan.detail) }] },
+              contents: plan.input.map((message) => ({
+                role: message.role === 'assistant' ? 'model' : 'user',
+                parts: [{ text: message.content }],
+              })),
+              generationConfig: {
+                candidateCount: 1,
+                maxOutputTokens: plan.maxTokens,
+                thinkingConfig: { thinkingBudget: 0 },
+              },
+            }),
+            signal: AbortSignal.timeout(attemptMs),
+          },
+        );
         if (!response.ok) {
           const data = await response.json().catch(() => ({}));
-          throw providerError(response.status, data.error?.code, data.error?.type);
+          throw providerError(response, data);
         }
         return extractReply(await response.json());
       } catch (error) {
@@ -91,6 +122,10 @@ export function createAiService(config, fetchImpl = fetch) {
               ? new ChatError(504, 'A resposta demorou mais que o esperado. Tente novamente.', true)
               : new ChatError(502, 'Não consegui conectar à IA. Tente novamente.', true);
         if (!lastError.retryable) throw lastError;
+        if (lastError.retryAfterMs && index < plan.models.length - 1) {
+          if (lastError.retryAfterMs >= deadline - Date.now()) throw lastError;
+          await new Promise((resolve) => setTimeout(resolve, lastError.retryAfterMs));
+        }
       }
     }
     throw lastError || new ChatError(504, 'O tempo para responder acabou. Tente novamente.');

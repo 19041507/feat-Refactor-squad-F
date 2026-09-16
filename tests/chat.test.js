@@ -35,16 +35,14 @@ test('site responde sem chave; chat informa indisponibilidade sem expor configur
 test('mensagem e histórico válidos percorrem HTTP, controller e serviço', async (t) => {
   let sent;
   const request = await launch(t, {
-    config: readConfig({ OPENAI_API_KEY: 'fake-secret' }),
+    config: readConfig({ GEMINI_API_KEY: 'fake-secret' }),
     fetchImpl: async (_, options) => {
       sent = JSON.parse(options.body);
       return Response.json({
-        status: 'completed',
-        output: [
+        candidates: [
           {
-            type: 'message',
-            role: 'assistant',
-            content: [{ type: 'output_text', text: 'Use a pasta src.' }],
+            content: { role: 'model', parts: [{ text: 'Use a pasta src.' }] },
+            finishReason: 'STOP',
           },
         ],
       });
@@ -59,8 +57,12 @@ test('mensagem e histórico válidos percorrem HTTP, controller e serviço', asy
   });
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), { reply: 'Use a pasta src.' });
-  assert.deepEqual(sent.input.at(-1), { role: 'user', content: 'Onde fica o código?' });
-  assert.equal(sent.input.length, 3);
+  assert.deepEqual(sent.contents.at(-1), {
+    role: 'user',
+    parts: [{ text: 'Onde fica o código?' }],
+  });
+  assert.equal(sent.contents.length, 3);
+  assert.equal(sent.contents[1].role, 'model');
 });
 
 test('rejeita entradas vazias, grandes e histórico com papéis privilegiados', async (t) => {
@@ -117,13 +119,10 @@ test('bloqueia chamadas vindas de outra origem', async (t) => {
 
 test('aceita histórico completo dentro dos limites de caracteres', async (t) => {
   const request = await launch(t, {
-    config: readConfig({ OPENAI_API_KEY: 'test-key' }),
+    config: readConfig({ GEMINI_API_KEY: 'test-key' }),
     fetchImpl: async () =>
       Response.json({
-        status: 'completed',
-        output: [
-          { type: 'message', role: 'assistant', content: [{ type: 'output_text', text: 'Ok' }] },
-        ],
+        candidates: [{ content: { role: 'model', parts: [{ text: 'Ok' }] }, finishReason: 'STOP' }],
       }),
   });
   const history = Array.from({ length: 10 }, (_, index) => ({
@@ -136,17 +135,12 @@ test('aceita histórico completo dentro dos limites de caracteres', async (t) =>
 test('preferência de detalhe controla orçamento e rejeita opções desconhecidas', async (t) => {
   let budget;
   const request = await launch(t, {
-    config: readConfig({ OPENAI_API_KEY: 'test-key' }),
+    config: readConfig({ GEMINI_API_KEY: 'test-key' }),
     fetchImpl: async (_, options) => {
-      budget = JSON.parse(options.body).max_output_tokens;
+      budget = JSON.parse(options.body).generationConfig.maxOutputTokens;
       return Response.json({
-        status: 'completed',
-        output: [
-          {
-            type: 'message',
-            role: 'assistant',
-            content: [{ type: 'output_text', text: 'Resposta.' }],
-          },
+        candidates: [
+          { content: { role: 'model', parts: [{ text: 'Resposta.' }] }, finishReason: 'STOP' },
         ],
       });
     },
