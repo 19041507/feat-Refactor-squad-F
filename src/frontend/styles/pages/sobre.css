@@ -11,8 +11,9 @@
 }
 .icon-value {
   display: block;
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   margin-bottom: 16px;
+  filter: grayscale(1);
 }
 .value-item p {
   font-size: 0.9rem;
@@ -21,9 +22,10 @@
 .member-card img {
   width: 88px;
   height: 88px;
-  border-radius: 50%;
+  border-radius: var(--radius);
   object-fit: cover;
   margin-bottom: 20px;
+  filter: grayscale(1);
 }
 .member-card .role {
   font-size: 0.88rem;

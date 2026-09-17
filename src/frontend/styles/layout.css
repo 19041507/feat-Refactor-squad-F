@@ -4,8 +4,12 @@ body {
   flex-direction: column;
 }
 .site-header {
-  background: var(--white);
+  background: rgb(255 255 255 / 92%);
   border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(18px);
 }
 .header-inner {
   max-width: 1320px;
@@ -22,7 +26,7 @@ body {
   gap: 10px;
   text-decoration: none;
   color: var(--ink);
-  font-weight: 750;
+  font-weight: 760;
   white-space: nowrap;
 }
 .brand-mark {
@@ -30,10 +34,10 @@ body {
   height: 38px;
   display: grid;
   place-items: center;
-  border-radius: 12px;
-  color: white;
-  background: var(--blue);
-  font-size: 22px;
+  border-radius: 8px;
+  color: var(--white);
+  background: var(--black);
+  font-size: 20px;
 }
 .main-nav ul {
   list-style: none;
@@ -48,28 +52,28 @@ body {
   padding: 9px 10px;
   text-decoration: none;
   font-size: 0.85rem;
-  font-weight: 600;
-  border-radius: 9px;
+  font-weight: 640;
+  border-radius: 8px;
   color: var(--muted);
 }
 .main-nav a:hover,
 .main-nav a[aria-current] {
-  background: #edf2ff;
-  color: var(--blue-dark);
+  background: var(--paper);
+  color: var(--black);
 }
 .main-nav a.chat-link {
-  background: var(--blue);
-  color: white;
+  background: var(--black);
+  color: var(--white);
   margin-left: 6px;
 }
 .main-nav a.chat-link:hover {
-  background: var(--blue-dark);
+  background: #2a2a2a;
 }
 .menu-toggle {
   display: none;
-  background: white;
+  background: var(--white);
   border: 1px solid var(--line);
-  border-radius: 9px;
+  border-radius: 8px;
   padding: 8px 14px;
   color: var(--ink);
 }
@@ -92,7 +96,7 @@ main > section + section {
 }
 .site-footer {
   border-top: 1px solid var(--line);
-  background: white;
+  background: var(--white);
 }
 .footer-inner {
   max-width: 1216px;

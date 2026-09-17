@@ -1,9 +1,9 @@
 .eyebrow {
-  color: var(--blue-dark);
+  color: var(--soft);
   font-size: 0.76rem;
   font-weight: 750;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
+  letter-spacing: 0;
   margin-bottom: 16px;
 }
 .btn-primary,
@@ -13,25 +13,32 @@
   align-items: center;
   gap: 10px;
   padding: 12px 20px;
-  border-radius: 10px;
+  border-radius: 8px;
   font-weight: 650;
   text-decoration: none;
   border: 1px solid transparent;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
 }
 .btn-primary {
-  background: var(--blue);
-  color: white;
+  background: var(--black);
+  color: var(--white);
 }
 .btn-primary:hover {
-  background: var(--blue-dark);
+  background: #2a2a2a;
+  transform: translateY(-1px);
 }
 .btn-secondary {
-  background: white;
+  background: var(--white);
   border-color: var(--line);
   color: var(--ink);
 }
 .btn-secondary:hover {
   background: var(--paper);
+  border-color: var(--line-strong);
 }
 .projects-grid,
 .services-grid,
@@ -51,12 +58,26 @@
 .member-card,
 .case-depoimento-card {
   padding: 28px;
-  background: white;
+  background: var(--white);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-soft);
   min-width: 0;
   overflow-wrap: anywhere;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+.project-card:hover,
+.service-card:hover,
+.skill-card:hover,
+.testimonial-card:hover,
+.value-item:hover,
+.member-card:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
 }
 .project-card,
 .service-card {
@@ -71,10 +92,11 @@
 .project-type,
 .service-type,
 .skill-level {
-  color: var(--blue-dark);
+  color: var(--ink);
   font-size: 0.77rem;
   font-weight: 650;
-  background: #edf2ff;
+  background: var(--paper);
+  border: 1px solid var(--line);
   border-radius: 6px;
   padding: 5px 9px;
   align-self: flex-start;
@@ -93,7 +115,7 @@
 .testimonial-role,
 .case-depoimento-autor {
   font-size: 0.84rem;
-  color: var(--blue-dark);
+  color: var(--ink);
 }
 .testimonial-text,
 .case-depoimento-texto {
@@ -106,7 +128,7 @@
 .case-desafio,
 .case-solucao,
 .case-resultados {
-  background: white;
+  background: var(--white);
   padding: 30px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -124,8 +146,8 @@
 }
 .academic-note {
   padding: 12px 16px;
-  border-left: 3px solid var(--blue);
-  background: #edf2ff;
+  border-left: 3px solid var(--black);
+  background: var(--surface);
   font-size: 0.85rem;
   border-radius: 0 8px 8px 0;
 }
@@ -142,9 +164,9 @@ textarea {
   display: block;
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid #9aa9c0;
-  border-radius: 9px;
-  background: white;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--white);
   color: var(--ink);
 }
 textarea {
