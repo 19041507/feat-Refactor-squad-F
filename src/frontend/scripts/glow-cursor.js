@@ -5,7 +5,9 @@ const IDLE_TIMEOUT = 700;
 export function initGlowCursor() {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const coarsePointer = matchMedia('(pointer: coarse)').matches;
-  if (reducedMotion || coarsePointer || innerWidth < 800) return;
+  const hasFinePointer = matchMedia('(any-pointer: fine)').matches;
+  const touchOnly = coarsePointer && !hasFinePointer;
+  if (reducedMotion || touchOnly || innerWidth < 800) return;
 
   const canvas = document.createElement('canvas');
   canvas.className = 'glow-cursor';

@@ -120,7 +120,7 @@ button:disabled {
     animation: none !important;
   }
 }
-@media (max-width: 799px), (pointer: coarse) {
+@media (max-width: 799px) {
   .glow-cursor {
     display: none;
   }

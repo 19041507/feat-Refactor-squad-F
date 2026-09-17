@@ -73,3 +73,18 @@ test('cursor luminoso respeita preferência por menos movimento', async ({ page 
 
   await expect(page.locator('.glow-cursor')).toHaveCount(0);
 });
+
+test('cursor luminoso funciona em notebook com tela de toque e mouse', async ({ page }) => {
+  test.skip(page.viewportSize().width < 800, 'Efeito exclusivo para telas com mouse.');
+  await page.addInitScript(() => {
+    const nativeMatchMedia = window.matchMedia.bind(window);
+    window.matchMedia = (query) => {
+      if (query === '(pointer: coarse)') return { matches: true };
+      if (query === '(any-pointer: fine)') return { matches: true };
+      return nativeMatchMedia(query);
+    };
+  });
+  await page.goto('/index.html');
+
+  await expect(page.locator('.glow-cursor')).toBeAttached();
+});
