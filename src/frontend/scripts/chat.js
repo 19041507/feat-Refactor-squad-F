@@ -11,6 +11,82 @@ const detail = document.querySelector('#response-detail');
 let history = [];
 let busy = false;
 
+const portfolioDestinations = [
+  {
+    label: 'Conhecer a equipe',
+    href: '/pages/sobre.html',
+    pattern: /\b(sobre|equipe|integrantes?|pessoas?)\b/,
+  },
+  {
+    label: 'Ver projetos',
+    href: '/pages/projetos.html',
+    pattern: /\b(projetos?|trabalhos?)\b/,
+  },
+  {
+    label: 'Explorar habilidades',
+    href: '/pages/habilidades.html',
+    pattern: /\b(habilidades?|competencias?)\b/,
+  },
+  {
+    label: 'Conhecer os serviços',
+    href: '/pages/servicos.html',
+    pattern: /\b(servicos?|solucoes?)\b/,
+  },
+  {
+    label: 'Ler depoimentos',
+    href: '/pages/depoimentos.html',
+    pattern: /\b(depoimentos?|relatos?)\b/,
+  },
+  {
+    label: 'Ver estudo de caso',
+    href: '/pages/case-de-sucesso.html',
+    pattern: /\b(estudo de caso|case de sucesso|case)\b/,
+  },
+  {
+    label: 'Ir para contato',
+    href: '/pages/contato.html',
+    pattern: /\b(contato|fale conosco|mensagem)\b/,
+  },
+];
+
+function normalizeText(value) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+function appendRecommendations(article, content) {
+  const normalized = normalizeText(content);
+  const destinations = portfolioDestinations
+    .map((destination) => ({ ...destination, position: normalized.search(destination.pattern) }))
+    .filter((destination) => destination.position >= 0)
+    .sort((first, second) => first.position - second.position)
+    .slice(0, 2);
+  if (!destinations.length) return;
+
+  const nav = document.createElement('nav');
+  nav.className = 'message-recommendations';
+  nav.setAttribute('aria-label', 'Continue explorando');
+  const title = document.createElement('span');
+  title.className = 'recommendations-title';
+  title.textContent = 'Continue explorando';
+  const links = document.createElement('div');
+  links.className = 'recommendations-links';
+  destinations.forEach(({ label, href }) => {
+    const link = document.createElement('a');
+    link.href = href;
+    link.textContent = label;
+    const arrow = document.createElement('span');
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = ' →';
+    link.append(arrow);
+    links.append(link);
+  });
+  nav.append(title, links);
+  article.append(nav);
+}
+
 function appendMessage(role, content) {
   const article = document.createElement('article');
   article.dataset.role = role;
@@ -19,6 +95,7 @@ function appendMessage(role, content) {
   const text = document.createElement('p');
   text.textContent = content;
   article.append(title, text);
+  if (role === 'assistant') appendRecommendations(article, content);
   messages.append(article);
   return article;
 }

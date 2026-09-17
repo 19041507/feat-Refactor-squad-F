@@ -101,3 +101,33 @@ test('usuário escolhe detalhes e vê sua mensagem enquanto aguarda', async ({ p
   expect(payload.detail).toBe('detailed');
   await expect(page.getByRole('log').locator('article')).toHaveCount(2);
 });
+
+test('Fê oferece atalhos seguros para conteúdos citados na resposta', async ({ page }) => {
+  await page.route('**/api/chat', async (route) => {
+    await route.fulfill({
+      json: {
+        reply:
+          'Conheça melhor a equipe na página Sobre. Depois, veja os Projetos e os Serviços do Squad F.',
+      },
+    });
+  });
+  await page.goto('/pages/chat.html');
+  await page.getByLabel('Sua mensagem').fill('Onde posso ler mais?');
+  await page.getByLabel('Sua mensagem').press('Enter');
+
+  const recommendations = page.getByLabel('Continue explorando');
+  await expect(recommendations).toBeVisible();
+  await expect(recommendations.getByRole('link')).toHaveCount(2);
+  await expect(recommendations.getByRole('link', { name: 'Conhecer a equipe' })).toHaveAttribute(
+    'href',
+    '/pages/sobre.html',
+  );
+  await expect(recommendations.getByRole('link', { name: 'Ver projetos' })).toHaveAttribute(
+    'href',
+    '/pages/projetos.html',
+  );
+  const destinations = await recommendations
+    .getByRole('link')
+    .evaluateAll((links) => links.map((link) => link.getAttribute('href')));
+  expect(destinations).toEqual(['/pages/sobre.html', '/pages/projetos.html']);
+});

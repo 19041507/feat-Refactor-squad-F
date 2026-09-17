@@ -209,6 +209,46 @@
 .messages article[data-role='user'] p {
   color: var(--white);
 }
+.message-recommendations {
+  margin-top: 16px;
+  padding: 14px;
+  color: var(--white);
+  background: var(--black);
+  border-radius: 12px;
+}
+.recommendations-title {
+  display: block;
+  margin-bottom: 10px;
+  color: #bdbdb8;
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.recommendations-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.recommendations-links a {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  color: var(--black);
+  background: var(--accent);
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 720;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+.recommendations-links a:hover {
+  background: var(--white);
+  transform: translateY(-1px);
+}
 .chat-form {
   border-top: 1px solid var(--line);
   padding: 20px 24px;
