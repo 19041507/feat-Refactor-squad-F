@@ -4,17 +4,17 @@ body {
   flex-direction: column;
 }
 .site-header {
-  background: rgb(255 255 255 / 92%);
-  border-bottom: 1px solid var(--line);
+  background: rgb(10 10 10 / 94%);
+  border-bottom: 1px solid #252525;
   position: sticky;
   top: 0;
   z-index: 10;
   backdrop-filter: blur(18px);
 }
 .header-inner {
-  max-width: 1320px;
+  max-width: 1400px;
   margin: auto;
-  padding: 20px 28px;
+  padding: 14px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -25,19 +25,25 @@ body {
   align-items: center;
   gap: 10px;
   text-decoration: none;
-  color: var(--ink);
+  color: var(--white);
   font-weight: 760;
   white-space: nowrap;
 }
 .brand-mark {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   display: grid;
   place-items: center;
   border-radius: 8px;
-  color: var(--white);
-  background: var(--black);
-  font-size: 20px;
+  color: var(--black);
+  background: var(--accent);
+  padding: 7px;
+  transform: rotate(-3deg);
+}
+.brand-mark svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
 }
 .main-nav ul {
   list-style: none;
@@ -54,20 +60,21 @@ body {
   font-size: 0.85rem;
   font-weight: 640;
   border-radius: 8px;
-  color: var(--muted);
+  color: #bdbdb8;
 }
 .main-nav a:hover,
 .main-nav a[aria-current] {
-  background: var(--paper);
-  color: var(--black);
+  background: #222;
+  color: var(--white);
 }
 .main-nav a.chat-link {
-  background: var(--black);
-  color: var(--white);
+  background: var(--accent);
+  color: var(--black);
   margin-left: 6px;
 }
 .main-nav a.chat-link:hover {
-  background: #2a2a2a;
+  background: var(--white);
+  color: var(--black);
 }
 .menu-toggle {
   display: none;
@@ -78,9 +85,9 @@ body {
   color: var(--ink);
 }
 main {
-  width: min(1160px, calc(100% - 56px));
+  width: min(1360px, calc(100% - 48px));
   margin: 0 auto;
-  padding: 62px 0 80px;
+  padding: 52px 0 72px;
   flex: 1;
 }
 main > section + section {

@@ -14,7 +14,7 @@ const header = document.querySelector('[data-site-header]');
 if (header) {
   header.innerHTML = `
     <div class="header-inner">
-      <a class="brand" href="/index.html" aria-label="Squad F — início"><span class="brand-mark" aria-hidden="true">F</span><span>Squad F</span></a>
+      <a class="brand" href="/index.html" aria-label="Squad F — início"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M5 5h22v6H12v4h12v6H12v6H5V5Z"/><path d="m23 20 4 4-4 4-4-4 4-4Z"/></svg></span><span>Squad F</span></a>
       <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menu">Menu ☰</button>
       <nav class="main-nav" id="main-nav" aria-label="Principal"><ul>${links
         .map(

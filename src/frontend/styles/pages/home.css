@@ -1,9 +1,9 @@
 .section-hero {
   display: grid;
   grid-template-columns: 1.25fr 1fr;
-  gap: 54px;
+  gap: 40px;
   align-items: center;
-  padding: 28px 0 54px;
+  padding: 18px 0 48px;
 }
 .hero-text h1 {
   max-width: 620px;
@@ -22,19 +22,43 @@
   margin-top: 30px;
 }
 .team-members {
-  background: var(--night);
-  padding: 30px;
+  position: relative;
+  background: var(--black);
+  padding: 28px 32px;
   border: 1px solid #2a2a2a;
-  border-radius: var(--radius);
+  border-radius: 22px;
   box-shadow: var(--shadow);
   animation: rise-in 520ms ease both;
+}
+.team-members::before {
+  content: 'F';
+  position: absolute;
+  top: -22px;
+  right: 22px;
+  color: var(--accent);
+  font-size: 7rem;
+  font-weight: 900;
+  line-height: 1;
+  opacity: 0.12;
+  transform: rotate(6deg);
 }
 .team-members > .eyebrow {
   color: #b8b8b8;
 }
 .member {
-  padding: 18px 0;
+  position: relative;
+  padding: 14px 0 14px 18px;
   border-bottom: 1px solid #2f2f2f;
+}
+.member::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 21px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
 }
 .member:last-child {
   border-bottom: none;

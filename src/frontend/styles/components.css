@@ -1,9 +1,9 @@
 .eyebrow {
-  color: var(--soft);
+  color: #62625c;
   font-size: 0.76rem;
   font-weight: 750;
   text-transform: uppercase;
-  letter-spacing: 0;
+  letter-spacing: 0.08em;
   margin-bottom: 16px;
 }
 .btn-primary,
@@ -13,7 +13,7 @@
   align-items: center;
   gap: 10px;
   padding: 12px 20px;
-  border-radius: 8px;
+  border-radius: 999px;
   font-weight: 650;
   text-decoration: none;
   border: 1px solid transparent;
@@ -24,11 +24,11 @@
     transform 180ms ease;
 }
 .btn-primary {
-  background: var(--black);
-  color: var(--white);
+  background: var(--accent);
+  color: var(--black);
 }
 .btn-primary:hover {
-  background: #2a2a2a;
+  background: var(--white);
   transform: translateY(-1px);
 }
 .btn-secondary {
@@ -57,7 +57,7 @@
 .value-item,
 .member-card,
 .case-depoimento-card {
-  padding: 28px;
+  padding: 24px;
   background: var(--white);
   border: 1px solid var(--line);
   border-radius: var(--radius);

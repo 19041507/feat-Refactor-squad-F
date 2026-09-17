@@ -1,24 +1,43 @@
 import { test, expect } from '@playwright/test';
 
-test('home usa identidade monocromatica com tipografia controlada', async ({ page }) => {
+test('home usa identidade escura com assinatura visual do Squad F', async ({ page }) => {
   await page.goto('/index.html');
 
   const heroTitle = page.locator('.hero-text h1');
   const primaryButton = page.getByRole('link', { name: /Explore os projetos/ });
   const teamPanel = page.locator('.team-members');
+  const brandSymbol = page.locator('.brand-mark svg');
 
   await expect(heroTitle).toBeVisible();
   const titleSize = await heroTitle.evaluate((element) =>
     parseFloat(getComputedStyle(element).fontSize),
   );
-  expect(titleSize).toBeGreaterThanOrEqual(42);
+  expect(titleSize).toBeGreaterThanOrEqual(page.viewportSize().width < 600 ? 36 : 42);
   expect(titleSize).toBeLessThanOrEqual(58);
-  await expect(primaryButton).toHaveCSS('background-color', 'rgb(10, 10, 10)');
-  await expect(teamPanel).toHaveCSS('background-color', 'rgb(17, 17, 17)');
-  await expect(teamPanel).toHaveCSS('border-radius', '8px');
+  await expect(primaryButton).toHaveCSS('background-color', 'rgb(202, 255, 51)');
+  await expect(teamPanel).toHaveCSS('background-color', 'rgb(10, 10, 10)');
+  await expect(brandSymbol).toBeVisible();
 });
 
-test('chat tem painel profissional em preto e branco', async ({ page }) => {
+test('pagina sobre apresenta equipe compacta, colorida e aproveita a largura', async ({ page }) => {
+  await page.goto('/pages/sobre.html');
+
+  const main = page.locator('main');
+  const heading = page.locator('.section-equipe h2');
+  const firstPhoto = page.locator('.member-card img').first();
+  const firstCard = page.locator('.member-card').first();
+
+  await expect(heading).toHaveText('Conheça o Squad F');
+  await expect(firstPhoto).toHaveCSS('filter', 'none');
+  await expect(firstCard).toHaveCSS('border-top-color', 'rgb(202, 255, 51)');
+
+  if (page.viewportSize().width >= 1200) {
+    const mainWidth = await main.evaluate((element) => element.getBoundingClientRect().width);
+    expect(mainWidth).toBeGreaterThan(1250);
+  }
+});
+
+test('chat mantém a identidade visual do portfolio', async ({ page }) => {
   await page.goto('/pages/chat.html');
 
   const sidebar = page.locator('.chat-sidebar');
@@ -27,9 +46,9 @@ test('chat tem painel profissional em preto e branco', async ({ page }) => {
   const input = page.getByLabel('Sua mensagem');
   const submit = page.getByRole('button', { name: 'Enviar mensagem', exact: true });
 
-  await expect(sidebar).toHaveCSS('background-color', 'rgb(17, 17, 17)');
-  await expect(panel).toHaveCSS('border-radius', '8px');
+  await expect(sidebar).toHaveCSS('background-color', 'rgb(10, 10, 10)');
+  await expect(panel).toHaveCSS('border-radius', '16px');
   await expect(suggestion).toHaveCSS('background-color', 'rgb(255, 255, 255)');
-  await expect(input).toHaveCSS('border-radius', '8px');
-  await expect(submit).toHaveCSS('background-color', 'rgb(10, 10, 10)');
+  await expect(input).toHaveCSS('border-radius', '12px');
+  await expect(submit).toHaveCSS('background-color', 'rgb(202, 255, 51)');
 });

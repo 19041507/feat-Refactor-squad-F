@@ -1,18 +1,20 @@
 :root {
   color-scheme: light;
-  --blue: #0a0a0a;
-  --blue-dark: #111;
+  --blue: #caff33;
+  --blue-dark: #9ed900;
+  --accent: #caff33;
+  --accent-strong: #9ed900;
   --black: #0a0a0a;
   --night: #111;
   --ink: #151515;
   --muted: #5f5f5f;
   --soft: #8a8a8a;
-  --paper: #f6f6f3;
-  --surface: #fbfbf8;
+  --paper: #f2f2ed;
+  --surface: #fafaf6;
   --white: #fff;
   --line: #deded8;
   --line-strong: #b9b9b1;
-  --radius: 8px;
+  --radius: 16px;
   --shadow: 0 14px 40px rgb(0 0 0 / 7%);
   --shadow-soft: 0 8px 26px rgb(0 0 0 / 5%);
 }
@@ -48,11 +50,11 @@ h3 {
   letter-spacing: 0;
 }
 h1 {
-  font-size: clamp(2.625rem, 4vw, 3.625rem);
+  font-size: clamp(2.35rem, 3.5vw, 3.35rem);
   font-weight: 760;
 }
 h2 {
-  font-size: clamp(1.45rem, 2.4vw, 2rem);
+  font-size: clamp(1.3rem, 2vw, 1.75rem);
   font-weight: 740;
 }
 h3 {
@@ -88,7 +90,7 @@ button:disabled {
   opacity: 0.65;
 }
 :focus-visible {
-  outline: 3px solid #8f8f86;
+  outline: 3px solid var(--accent);
   outline-offset: 4px;
 }
 [hidden] {
