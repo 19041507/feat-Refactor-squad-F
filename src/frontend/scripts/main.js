@@ -1,6 +1,8 @@
 import { initGlowCursor } from './glow-cursor.js';
+import { initBlurText } from './blur-text.js';
 
 initGlowCursor();
+initBlurText();
 
 const links = [
   ['Início', '/index.html'],

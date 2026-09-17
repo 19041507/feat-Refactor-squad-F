@@ -19,6 +19,23 @@ test('home usa identidade escura com assinatura visual do Squad F', async ({ pag
   await expect(brandSymbol).toBeVisible();
 });
 
+test('título principal entra palavra por palavra e termina totalmente nítido', async ({ page }) => {
+  await page.goto('/index.html');
+
+  const title = page.locator('.hero-text h1');
+  const words = title.locator('.blur-text-word');
+  await expect(title).toContainText('Ideias em equipe.');
+  await expect(title).toContainText('Código com propósito.');
+  await expect(words).toHaveCount(6);
+  await expect(words.last()).toHaveCSS('opacity', '1');
+  await expect(words.last()).toHaveCSS('filter', 'blur(0px)');
+  await expect(words.first()).toHaveCSS('color', 'rgb(21, 21, 21)');
+  await expect(title.locator('.hero-title-muted .blur-text-word').first()).toHaveCSS(
+    'color',
+    'rgb(95, 95, 95)',
+  );
+});
+
 test('pagina sobre apresenta equipe compacta, colorida e aproveita a largura', async ({ page }) => {
   await page.goto('/pages/sobre.html');
 
