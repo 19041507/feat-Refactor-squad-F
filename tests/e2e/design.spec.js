@@ -52,3 +52,24 @@ test('chat mantém a identidade visual do portfolio', async ({ page }) => {
   await expect(input).toHaveCSS('border-radius', '12px');
   await expect(submit).toHaveCSS('background-color', 'rgb(202, 255, 51)');
 });
+
+test('cursor luminoso acompanha o mouse sem bloquear a interface', async ({ page }) => {
+  test.skip(page.viewportSize().width < 800, 'Efeito exclusivo para telas com mouse.');
+  await page.goto('/index.html');
+
+  const glow = page.locator('.glow-cursor');
+  await expect(glow).toBeVisible();
+  await expect(glow).toHaveAttribute('aria-hidden', 'true');
+  await expect(glow).toHaveCSS('pointer-events', 'none');
+
+  await page.mouse.move(240, 180);
+  await expect(glow).toHaveClass(/is-active/);
+});
+
+test('cursor luminoso respeita preferência por menos movimento', async ({ page }) => {
+  test.skip(page.viewportSize().width < 800, 'Efeito exclusivo para telas com mouse.');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/index.html');
+
+  await expect(page.locator('.glow-cursor')).toHaveCount(0);
+});

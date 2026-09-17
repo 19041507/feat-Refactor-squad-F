@@ -1,3 +1,7 @@
+import { initGlowCursor } from './glow-cursor.js';
+
+initGlowCursor();
+
 const links = [
   ['Início', '/index.html'],
   ['Sobre', '/pages/sobre.html'],

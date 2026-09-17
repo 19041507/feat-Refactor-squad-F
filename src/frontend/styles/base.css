@@ -96,6 +96,21 @@ button:disabled {
 [hidden] {
   display: none !important;
 }
+.glow-cursor {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  opacity: 0.01;
+  transition: opacity 900ms ease;
+  will-change: opacity;
+}
+.glow-cursor.is-active {
+  opacity: 1;
+  transition-duration: 160ms;
+}
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -103,5 +118,10 @@ button:disabled {
     scroll-behavior: auto !important;
     transition: none !important;
     animation: none !important;
+  }
+}
+@media (max-width: 799px), (pointer: coarse) {
+  .glow-cursor {
+    display: none;
   }
 }
